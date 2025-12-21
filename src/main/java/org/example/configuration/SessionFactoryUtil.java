@@ -1,5 +1,6 @@
 package org.example.configuration;
 
+import org.example.entity.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -16,7 +17,14 @@ public class SessionFactoryUtil {
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
+            // свързва ентити модела със съответната му таблица
             Configuration configuration = new Configuration();
+            configuration.addAnnotatedClass(Apartment.class);
+            configuration.addAnnotatedClass(Building.class);
+            configuration.addAnnotatedClass(Company.class);
+            configuration.addAnnotatedClass(Employee.class);
+            configuration.addAnnotatedClass(Owner.class);
+            configuration.addAnnotatedClass(Resident.class);
             ServiceRegistry serviceRegistry
                     = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
