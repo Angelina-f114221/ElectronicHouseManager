@@ -12,6 +12,8 @@ import jakarta.persistence.Id;
 public class Company {
     // анотирам ID-то, което също е от Jakarta
     @Id
+    // При генериране на записи, id-тата на една таблица са независими от тези на друга. позволява ни да имаме auto increment при code first подхода.
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
 }
