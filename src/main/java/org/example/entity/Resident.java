@@ -8,10 +8,7 @@ import jakarta.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class Resident {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Resident extends BaseEntity {
     private String name;
     private int age;
     private boolean uses_elevator;
