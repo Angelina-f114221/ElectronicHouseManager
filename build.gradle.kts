@@ -17,6 +17,9 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    // използва се, за да работя по-лесно с моделите. Целта е да използвам анотации и да си спестя Boiler Plate Code – експлицитното писане на конструктори, getter, setter, toString, equals, hash code. Така моделът на данни няма да е толкова обемен.
+    compileOnly("org.projectlombok:lombok:1.18.38")
+    annotationProcessor("org.projectlombok:lombok:1.18.38")
 }
 
 tasks.test {
