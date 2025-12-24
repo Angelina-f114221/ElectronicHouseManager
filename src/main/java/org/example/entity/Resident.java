@@ -1,11 +1,9 @@
 package org.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 public class Resident extends BaseEntity {
@@ -17,5 +15,7 @@ public class Resident extends BaseEntity {
     private LocalDate last_payment;
     private boolean has_paid_monthly_fee;
     private boolean is_owner;
-    // apartment_id INT
+
+    @ManyToMany
+    private Set<Apartment> apartments;
 }
