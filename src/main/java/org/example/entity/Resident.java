@@ -1,11 +1,13 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
+@ToString(callSuper=true)
 public class Resident extends BaseEntity {
     private String name;
     private int age;
