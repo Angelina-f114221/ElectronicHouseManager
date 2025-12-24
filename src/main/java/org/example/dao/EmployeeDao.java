@@ -1,0 +1,17 @@
+package org.example.dao;
+
+import org.example.configuration.SessionFactoryUtil;
+import org.example.entity.Company;
+import org.example.entity.Employee;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+public class EmployeeDao {
+    public static void createEmployee(Employee employee) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.persist(employee);
+            transaction.commit();
+        }
+    }
+}
