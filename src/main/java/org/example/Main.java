@@ -7,5 +7,6 @@ public class Main {
     static void main() {
         // отварям сесията чрез session factory util класа. правя локална променлива и я използвам, за да се конектна към базата и след това да изпълнявам заявки към нея.
         Session session =  SessionFactoryUtil.getSessionFactory().openSession();
+        session.close();
     }
 }
