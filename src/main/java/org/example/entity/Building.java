@@ -1,9 +1,8 @@
 package org.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 public class Building extends BaseEntity {
@@ -16,4 +15,6 @@ public class Building extends BaseEntity {
     private double fee_per_sqm;
     private double fee_per_pet_using_ca;
     // employee_id INT
+    @OneToMany(mappedBy = "building")
+    private Set<Apartment> apartments;
 }

@@ -13,6 +13,9 @@ public class Apartment extends BaseEntity {
     @ManyToMany(mappedBy = "owner")
     private Set<Owner> owners;
 
+    @ManyToMany(mappedBy = "resident")
+    private Set<Resident> residents;
+
     @ManyToOne
     private Building building;
 }
