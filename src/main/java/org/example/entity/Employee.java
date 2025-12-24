@@ -1,13 +1,17 @@
 package org.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 public class Employee extends BaseEntity {
     private String name;
     private int age;
-    // company_id INT
+
+    @ManyToOne
+    private Company company;
+
+    @OneToMany(mappedBy = "employee")
+    private Set<Building> buildings;
 }
