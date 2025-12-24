@@ -17,4 +17,10 @@ public class Building extends BaseEntity {
     // employee_id INT
     @OneToMany(mappedBy = "building")
     private Set<Apartment> apartments;
+
+    @ManyToOne
+    private Company company;
+
+    @ManyToOne
+    private Employee employee;
 }
