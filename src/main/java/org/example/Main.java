@@ -1,4 +1,5 @@
 package org.example;
+import org.example.dao.CompanyDao;
 import org.example.entity.Company;
 import org.hibernate.Session;
 import org.example.configuration.SessionFactoryUtil;
@@ -8,6 +9,7 @@ public class Main {
     static void main() {
         // отварям сесията чрез session factory util класа. правя локална променлива и я използвам, за да се конектна към базата и след това да изпълнявам заявки към нея.
         Company company = new Company();
-        company.setName("me");
+        company.setName("Apple");
+        CompanyDao.createCompany(company);
     }
 }
