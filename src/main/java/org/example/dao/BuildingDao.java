@@ -22,4 +22,9 @@ public class BuildingDao {
                     .getResultList();
         }
     }
+    public static Building getBuilding(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.find(Building.class, id);
+        }
+    }
 }
