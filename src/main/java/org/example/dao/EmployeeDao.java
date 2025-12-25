@@ -32,6 +32,7 @@ public class EmployeeDao {
             Transaction transaction = session.beginTransaction();
             Employee employee1 = session.find(Employee.class, id);
             employee1.setName(employee.getName());
+            employee1.setAge(employee.getAge());
             session.persist(employee1);
             transaction.commit();
         }

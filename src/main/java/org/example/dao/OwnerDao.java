@@ -27,4 +27,13 @@ public class OwnerDao {
             return session.find(Owner.class, id);
         }
     }
+    public static void updateOwner(long id, Owner owner) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Owner owner1 = session.find(Owner.class, id);
+            owner.setName(owner.getName());
+            session.persist(owner1);
+            transaction.commit();
+        }
+    }
 }
