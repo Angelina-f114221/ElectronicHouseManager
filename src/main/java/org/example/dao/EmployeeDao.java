@@ -27,4 +27,13 @@ public class EmployeeDao {
             return session.find(Employee.class, id);
         }
     }
+    public static void updateEmployee(long id, Employee employee) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Employee employee1 = session.find(Employee.class, id);
+            employee1.setName(employee.getName());
+            session.persist(employee1);
+            transaction.commit();
+        }
+    }
 }
