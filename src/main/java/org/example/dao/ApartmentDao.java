@@ -22,4 +22,9 @@ public class ApartmentDao {
                     .getResultList();
         }
     }
+    public static Apartment getApartment(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.find(Apartment.class, id);
+        }
+    }
 }
