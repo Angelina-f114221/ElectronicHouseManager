@@ -30,4 +30,14 @@ public class CompanyDao {
         }
     }
 
+    /*
+    Искам да мога да намирам записи по уникалния им идентификатор. Като аргумент ще бъде подадено id-то. през сесията ще използвам метод, който може да намери записа през ентити обекта, който ми трябва. ще заменя извикването на метода createQuery с извикване на метода find, който ще намери записа със съответното ID. ще кажа, че искам да получа company класа и подавам съответното ID на записа, за да намеря компанията, която търся.
+
+     */
+    public static Company getCompany(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.find(Company.class, id);
+        }
+    }
+
 }
