@@ -22,4 +22,9 @@ public class OwnerDao {
                     .getResultList();
         }
     }
+    public static Owner getOwner(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.find(Owner.class, id);
+        }
+    }
 }
