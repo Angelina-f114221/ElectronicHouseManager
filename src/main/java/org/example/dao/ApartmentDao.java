@@ -27,4 +27,15 @@ public class ApartmentDao {
             return session.find(Apartment.class, id);
         }
     }
+    public static void updateApartment(long id, Apartment apartment) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Apartment apartment1 = session.find(Apartment.class, id);
+            apartment1.setArea(apartment.getArea());
+            apartment1.setFloor(apartment.getFloor());
+            apartment1.setNumber(apartment.getNumber());
+            session.persist(apartment1);
+            transaction.commit();
+        }
+    }
 }
