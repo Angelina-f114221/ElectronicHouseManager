@@ -22,4 +22,9 @@ public class ResidentDao {
                     .getResultList();
         }
     }
+    public static Resident getResident(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.find(Resident.class, id);
+        }
+    }
 }
