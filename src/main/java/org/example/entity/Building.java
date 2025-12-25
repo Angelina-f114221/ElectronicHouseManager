@@ -22,6 +22,7 @@ public class Building extends BaseEntity {
     private double fee_per_pet_using_ca;
 
     @OneToMany(mappedBy = "building")
+    @ToString.Exclude
     private Set<Apartment> apartments;
 
     @ManyToOne
