@@ -22,4 +22,9 @@ public class EmployeeDao {
                     .getResultList();
         }
     }
+    public static Employee getEmployee(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.find(Employee.class, id);
+        }
+    }
 }
