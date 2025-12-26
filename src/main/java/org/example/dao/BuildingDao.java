@@ -43,4 +43,12 @@ public class BuildingDao {
             transaction.commit();
         }
     }
+    public static void deleteBuilding(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Building building1 = session.find(Building.class, id);
+            session.remove(building1);
+            transaction.commit();
+        }
+    }
 }
