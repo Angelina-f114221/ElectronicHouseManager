@@ -54,4 +54,16 @@ public class CompanyDao {
         }
     }
 
+    /*
+    правя операцията Delete, като намирам обекта по ID-то и след това го изтривам. Като открия обекта с find метода през session, няма да сетвам никакви стойности на нейните полета. вместо да извикам метода persist, ще извикам метода remove.
+     */
+    public static void deleteCompany(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Company company1 = session.find(Company.class, id);
+            session.remove(company1);
+            transaction.commit();
+        }
+    }
+
 }
