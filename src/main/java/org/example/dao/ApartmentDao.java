@@ -38,4 +38,12 @@ public class ApartmentDao {
             transaction.commit();
         }
     }
+    public static void deleteApartment(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Apartment apartment1 = session.find(Apartment.class, id);
+            session.remove(apartment1);
+            transaction.commit();
+        }
+    }
 }
