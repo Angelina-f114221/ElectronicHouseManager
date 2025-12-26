@@ -3,8 +3,17 @@ import org.example.dao.CompanyDao;
 import org.example.entity.Company;
 import org.hibernate.Session;
 import org.example.configuration.SessionFactoryUtil;
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
+
+/* !!!!!!!!!!!!! - week 6, 35:00
+Enum options are
+payment status: PENDING, PAID, OVERDUE, CANCELLED
+contract status: ACTIVE, TERMINATED, EXPIRED
+type of person: OWNER, TENANT, GUEST
+type of fee: BASE_AREA_FEE, PER_PERSON_FEE, PET_FEE
+!!!!!!!!!!!!!!!!
+ */
+
 public class Main {
     static void main() {
         // отварям сесията чрез session factory util класа. правя локална променлива и я използвам, за да се конектна към базата и след това да изпълнявам заявки към нея.
