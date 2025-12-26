@@ -43,4 +43,12 @@ public class ResidentDao {
             transaction.commit();
         }
     }
+    public static void deleteResident(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Resident resident1 = session.find(Resident.class, id);
+            session.remove(resident1);
+            transaction.commit();
+        }
+    }
 }
