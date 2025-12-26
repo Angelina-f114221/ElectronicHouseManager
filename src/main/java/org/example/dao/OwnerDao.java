@@ -36,4 +36,12 @@ public class OwnerDao {
             transaction.commit();
         }
     }
+    public static void deleteOwner(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Owner owner1 = session.find(Owner.class, id);
+            session.remove(owner1);
+            transaction.commit();
+        }
+    }
 }
