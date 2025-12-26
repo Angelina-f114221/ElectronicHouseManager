@@ -37,4 +37,12 @@ public class EmployeeDao {
             transaction.commit();
         }
     }
+    public static void deleteEmployee(long id) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Employee employee1 = session.find(Employee.class, id);
+            session.remove(employee1);
+            transaction.commit();
+        }
+    }
 }
