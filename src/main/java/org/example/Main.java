@@ -12,6 +12,7 @@ contract status: ACTIVE, TERMINATED, EXPIRED
 type of person: OWNER, TENANT, GUEST
 type of fee: BASE_AREA_FEE, PER_PERSON_FEE, PET_FEE
 !!!!!!!!!!!!!!!!
+implement dto models
  */
 
 public class Main {
