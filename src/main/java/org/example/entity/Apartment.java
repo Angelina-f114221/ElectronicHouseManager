@@ -15,7 +15,7 @@ public class Apartment extends BaseEntity {
     private int floor;
     private int number;
     private double area;
-    private boolean has_pet_using_common_areas;
+    private boolean has_pet_using_cа;
 
     @ManyToMany(mappedBy = "owner")
     private Set<Owner> owners;
