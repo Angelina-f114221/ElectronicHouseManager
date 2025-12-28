@@ -16,7 +16,6 @@ public class Resident extends BaseEntity {
     private String name;
     private int age;
     private boolean uses_elevator;
-    private boolean pet_uses_common_areas;
     private LocalDate contract_start;
     private LocalDate last_payment;
     private boolean has_paid_monthly_fee;
