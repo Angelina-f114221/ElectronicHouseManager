@@ -20,6 +20,7 @@ public class Building extends BaseEntity {
     private int n_apartments;
     private double fee_per_sqm;
     private double fee_per_pet_using_ca;
+    private double fee_per_person_over_7_using_elevator;
 
     @OneToMany(mappedBy = "building")
     @ToString.Exclude
