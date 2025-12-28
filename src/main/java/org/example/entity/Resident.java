@@ -17,9 +17,6 @@ public class Resident extends BaseEntity {
     private int age;
     private boolean uses_elevator;
     private LocalDate contract_start;
-    private LocalDate last_payment;
-    private boolean has_paid_monthly_fee;
-    private boolean is_owner;
 
     @ManyToMany
     private Set<Apartment> apartments;
