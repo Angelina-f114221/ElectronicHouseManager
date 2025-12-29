@@ -17,10 +17,10 @@ public class Apartment extends BaseEntity {
     private double area;
     private boolean has_pet_using_cа;
 
-    @ManyToMany(mappedBy = "owner")
+    @ManyToMany(mappedBy = "apartments")
     private Set<Owner> owners;
 
-    @ManyToMany(mappedBy = "resident")
+    @ManyToMany(mappedBy = "apartments")
     private Set<Resident> residents;
 
     @ManyToOne

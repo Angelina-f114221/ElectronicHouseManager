@@ -19,5 +19,7 @@ public class Resident extends BaseEntity {
     private LocalDate contract_start;
 
     @ManyToMany
+    @JoinTable(name = "resident_apartment")
+    @ToString.Exclude
     private Set<Apartment> apartments;
 }

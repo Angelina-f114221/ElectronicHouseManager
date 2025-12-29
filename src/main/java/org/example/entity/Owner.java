@@ -13,9 +13,9 @@ import java.util.Set;
 @ToString(callSuper=true)
 public class Owner extends BaseEntity {
     private String name;
-    // ???
     @ManyToMany
+    @JoinTable(name = "owner_apartment")
+    @ToString.Exclude
     private Set<Apartment> apartments;
 
-    // resident_id INT
 }
