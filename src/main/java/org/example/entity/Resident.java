@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
+@Table(name = "residents")
 @Getter
 @Setter
 @ToString(callSuper=true)

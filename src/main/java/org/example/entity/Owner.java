@@ -8,6 +8,7 @@ import lombok.ToString;
 import java.util.Set;
 
 @Entity
+@Table(name = "owners")
 @Getter
 @Setter
 @ToString(callSuper=true)

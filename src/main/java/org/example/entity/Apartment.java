@@ -8,6 +8,7 @@ import lombok.ToString;
 import java.util.Set;
 
 @Entity
+@Table(name = "apartments")
 @Getter
 @Setter
 @ToString(callSuper=true)
@@ -30,7 +31,7 @@ public class Apartment extends BaseEntity {
     @ToString.Exclude
     private Building building;
 
-    @OneToMany(mappedBy = "apartment")
+    @OneToMany(mappedBy = "apartment", orphanRemoval = true)
     @ToString.Exclude
     private Set<Payment> payments;
 }
