@@ -25,4 +25,8 @@ public class Apartment extends BaseEntity {
 
     @ManyToOne
     private Building building;
+
+    @OneToMany(mappedBy = "apartment")
+    @ToString.Exclude
+    private Set<Payment> payments;
 }

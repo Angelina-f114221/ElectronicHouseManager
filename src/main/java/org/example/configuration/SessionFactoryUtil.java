@@ -25,6 +25,7 @@ public class SessionFactoryUtil {
             configuration.addAnnotatedClass(Employee.class);
             configuration.addAnnotatedClass(Owner.class);
             configuration.addAnnotatedClass(Resident.class);
+            configuration.addAnnotatedClass(Payment.class);
             ServiceRegistry serviceRegistry
                     = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
