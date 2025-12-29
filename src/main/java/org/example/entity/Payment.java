@@ -20,6 +20,7 @@ public class Payment extends BaseEntity {
     private String period;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "apartment_id")
     private Apartment apartment;
 }
 
