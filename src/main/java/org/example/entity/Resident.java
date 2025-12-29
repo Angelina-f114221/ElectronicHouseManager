@@ -21,7 +21,7 @@ public class Resident extends BaseEntity {
     private boolean uses_elevator;
     private LocalDate contract_start;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "apartment_id", nullable = false)
     @ToString.Exclude
     private Apartment apartment;

@@ -19,6 +19,7 @@ public class Employee extends BaseEntity {
     private int age;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     @JoinColumn(name = "company_id")
     private Company company;
 

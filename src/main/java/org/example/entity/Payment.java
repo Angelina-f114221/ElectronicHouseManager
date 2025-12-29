@@ -19,7 +19,8 @@ public class Payment extends BaseEntity {
     private LocalDate payment_date;
     private String period;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ToString.Exclude
     @JoinColumn(name = "apartment_id", nullable = false)
     private Apartment apartment;
 }
