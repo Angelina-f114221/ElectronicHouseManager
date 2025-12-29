@@ -22,7 +22,7 @@ public class Resident extends BaseEntity {
     private LocalDate contract_start;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "apartment_id")
+    @JoinColumn(name = "apartment_id", nullable = false)
     @ToString.Exclude
     private Apartment apartment;
 }

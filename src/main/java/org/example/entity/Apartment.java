@@ -28,8 +28,8 @@ public class Apartment extends BaseEntity {
     @ToString.Exclude
     private Set<Resident> residents;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "building_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "building_id", nullable = false)
     @ToString.Exclude
     private Building building;
 
