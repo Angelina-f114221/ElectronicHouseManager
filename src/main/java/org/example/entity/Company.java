@@ -2,6 +2,7 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @Table(name = "companies")
 @Getter
 @Setter
+@NoArgsConstructor
 // toString методът включва само специфичните данни, без тези, които идват по наследство. обаче base entity включва първичния ключ. Тоест, трябва да може да бъде извикан в наследника и базовия toString метод, за да виждам цялата информация за обекта.
 @ToString(callSuper=true)
 public class Company extends BaseEntity {

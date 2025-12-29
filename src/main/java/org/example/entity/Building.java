@@ -2,6 +2,7 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @Table(name = "buildings")
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString(callSuper=true)
 public class Building extends BaseEntity {
     private String name;
