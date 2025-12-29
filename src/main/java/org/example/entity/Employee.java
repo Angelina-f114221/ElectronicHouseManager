@@ -15,7 +15,7 @@ public class Employee extends BaseEntity {
     private String name;
     private int age;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 
     @OneToMany(mappedBy = "employee")

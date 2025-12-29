@@ -18,8 +18,8 @@ public class Resident extends BaseEntity {
     private boolean uses_elevator;
     private LocalDate contract_start;
 
-    @ManyToMany
-    @JoinTable(name = "resident_apartment")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "apartment_id")
     @ToString.Exclude
-    private Set<Apartment> apartments;
+    private Apartment apartment;
 }

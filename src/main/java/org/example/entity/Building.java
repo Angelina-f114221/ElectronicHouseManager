@@ -27,9 +27,9 @@ public class Building extends BaseEntity {
     @ToString.Exclude
     private Set<Apartment> apartments;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
 }

@@ -16,7 +16,7 @@ public class Payment extends BaseEntity {
     private LocalDate payment_date;
     private String period;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Apartment apartment;
 }
 

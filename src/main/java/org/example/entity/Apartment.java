@@ -15,15 +15,19 @@ public class Apartment extends BaseEntity {
     private int floor;
     private int number;
     private double area;
-    private boolean has_pet_using_cа;
+    private int pets_using_ca;
 
     @ManyToMany(mappedBy = "apartments")
+    @ToString.Exclude
     private Set<Owner> owners;
 
-    @ManyToMany(mappedBy = "apartments")
+    @OneToMany(mappedBy = "apartment")
+    @ToString.Exclude
     private Set<Resident> residents;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "building_id")
+    @ToString.Exclude
     private Building building;
 
     @OneToMany(mappedBy = "apartment")
