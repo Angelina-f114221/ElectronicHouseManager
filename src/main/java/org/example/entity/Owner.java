@@ -14,8 +14,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString(callSuper=true)
-public class Owner extends BaseEntity {
-    private String name;
+public class Owner extends Person {
     @ManyToMany
     @JoinTable(name = "owner_apartment")
     @ToString.Exclude

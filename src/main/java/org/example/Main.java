@@ -4,7 +4,7 @@ import org.example.entity.Company;
 import org.hibernate.Session;
 import org.example.configuration.SessionFactoryUtil;
 
-
+// custom all args constructors
 /* !!!!!!!!!!!!! - week 6, 35:00
 Enum options are
 payment status: PENDING, PAID, OVERDUE, CANCELLED

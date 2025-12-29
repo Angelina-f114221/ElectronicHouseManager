@@ -14,9 +14,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString(callSuper=true)
-public class Employee extends BaseEntity {
-    private String name;
-    private int age;
+public class Employee extends Person {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
