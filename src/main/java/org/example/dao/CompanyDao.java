@@ -1,12 +1,13 @@
 package org.example.dao;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.Company;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
+
+import static org.example.dao.DaoUtil.require;
 
 // искам операциите, които са изпълняване на заявките да бъдат имплементирани в този слой. ще изграя по един DAO клас за всеки ентити модел освен base entity, тъй като той не съдържа специфични данни.
 // Това е клас за заявки и не е свързан с инстанционен контекст - данните са строго отделени от заявките.
@@ -48,13 +49,14 @@ public class CompanyDao {
     public static void updateCompany(long id, Company company) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Company company1 = session.find(Company.class, id);
-            if (company1 == null) {
+            try {
+                Company company1 = require(session, Company.class, id);
+                company1.setName(company.getName());
+                transaction.commit();
+            } catch (RuntimeException exception) {
                 transaction.rollback();
-                throw new EntityNotFoundException("Company with id=" + id + " not found");
+                throw exception;
             }
-            company1.setName(company.getName());
-            transaction.commit();
         }
     }
 
@@ -64,13 +66,14 @@ public class CompanyDao {
     public static void deleteCompany(long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Company company1 = session.find(Company.class, id);
-            if (company1 == null) {
+            try {
+                Company company1 = require(session, Company.class, id);
+                session.remove(company1);
+                transaction.commit();
+            } catch (RuntimeException exception) {
                 transaction.rollback();
-                throw new EntityNotFoundException("Company with id=" + id + " not found");
+                throw exception;
             }
-            session.remove(company1);
-            transaction.commit();
         }
     }
 

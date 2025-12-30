@@ -1,6 +1,5 @@
 package org.example.dao;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.EmployeeDto;
 import org.example.entity.Employee;
@@ -8,6 +7,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
+
+import static org.example.dao.DaoUtil.require;
 
 public class EmployeeDao {
     public static void createEmployee(Employee employee) {
@@ -40,26 +41,28 @@ public class EmployeeDao {
     public static void updateEmployee(long id, Employee employee) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Employee employee1 = session.find(Employee.class, id);
-            if  (employee1 == null) {
+            try {
+                Employee employee1 = require(session, Employee.class, id);
+                employee1.setName(employee.getName());
+                employee1.setAge(employee.getAge());
+                transaction.commit();
+            } catch (RuntimeException exception) {
                 transaction.rollback();
-                throw new EntityNotFoundException("Employee with id=" + id + " not found");
+                throw exception;
             }
-            employee1.setName(employee.getName());
-            employee1.setAge(employee.getAge());
-            transaction.commit();
         }
     }
     public static void deleteEmployee(long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Employee employee1 = session.find(Employee.class, id);
-            if (employee1 == null) {
+            try {
+                Employee employee1 = require(session, Employee.class, id);
+                session.remove(employee1);
+                transaction.commit();
+            } catch (RuntimeException exception) {
                 transaction.rollback();
-                throw new EntityNotFoundException("Employee with id=" + id + " not found");
+                throw exception;
             }
-            session.remove(employee1);
-            transaction.commit();
         }
     }
 }

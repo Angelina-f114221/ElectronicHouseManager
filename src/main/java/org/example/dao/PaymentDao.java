@@ -1,12 +1,13 @@
 package org.example.dao;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.Payment;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
+
+import static org.example.dao.DaoUtil.require;
 
 public class PaymentDao {
     public static void createPayment(Payment payment) {
@@ -30,25 +31,27 @@ public class PaymentDao {
     public static void updatePayment(long id, Payment payment) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Payment payment1 = session.find(Payment.class, id);
-            if (payment1 == null) {
+            try {
+                Payment payment1 = require(session, Payment.class, id);
+                payment1.setAmount(payment.getAmount());
+                transaction.commit();
+            } catch (RuntimeException exception) {
                 transaction.rollback();
-                throw new EntityNotFoundException("Payment with id=" + id + " not found");
+                throw exception;
             }
-            payment1.setAmount(payment.getAmount());
-            transaction.commit();
         }
     }
     public static void deletePayment(long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Payment payment1 = session.find(Payment.class, id);
-            if (payment1 == null) {
+            try {
+                Payment payment1 = require(session, Payment.class, id);
+                session.remove(payment1);
+                transaction.commit();
+            } catch (RuntimeException exception) {
                 transaction.rollback();
-                throw new EntityNotFoundException("Payment with id=" + id + " not found");
+                throw exception;
             }
-            session.remove(payment1);
-            transaction.commit();
         }
     }
 }

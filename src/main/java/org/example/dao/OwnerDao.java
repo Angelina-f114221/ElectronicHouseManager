@@ -1,12 +1,13 @@
 package org.example.dao;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.Owner;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
+
+import static org.example.dao.DaoUtil.require;
 
 public class OwnerDao {
     public static void createOwner(Owner owner) {
@@ -30,25 +31,27 @@ public class OwnerDao {
     public static void updateOwner(long id, Owner owner) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Owner owner1 = session.find(Owner.class, id);
-            if (owner1 == null) {
+            try {
+                Owner owner1 = require(session, Owner.class, id);
+                owner1.setName(owner.getName());
+                transaction.commit();
+            } catch (RuntimeException exception) {
                 transaction.rollback();
-                throw new EntityNotFoundException("Owner with id=" + id + " not found");
+                throw exception;
             }
-            owner1.setName(owner.getName());
-            transaction.commit();
         }
     }
     public static void deleteOwner(long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Owner owner1 = session.find(Owner.class, id);
-            if (owner1 == null) {
+            try {
+                Owner owner1 = require(session, Owner.class, id);
+                session.remove(owner1);
+                transaction.commit();
+            } catch (RuntimeException exception) {
                 transaction.rollback();
-                throw new EntityNotFoundException("Owner with id=" + id + " not found");
+                throw exception;
             }
-            session.remove(owner1);
-            transaction.commit();
         }
     }
 }
