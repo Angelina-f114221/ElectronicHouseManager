@@ -19,7 +19,7 @@ public class EmployeeDao {
     }
     public static List<Employee> getEmployees() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("SELECT a FROM Employee a", Employee.class)
+            return session.createQuery("SELECT e FROM Employee e", Employee.class)
                     .getResultList();
         }
     }
@@ -54,6 +54,10 @@ public class EmployeeDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Employee employee1 = session.find(Employee.class, id);
+            if (employee1 == null) {
+                transaction.rollback();
+                throw new EntityNotFoundException("Employee with id=" + id + " not found");
+            }
             session.remove(employee1);
             transaction.commit();
         }

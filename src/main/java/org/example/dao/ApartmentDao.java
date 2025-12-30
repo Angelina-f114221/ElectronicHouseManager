@@ -45,6 +45,10 @@ public class ApartmentDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Apartment apartment1 = session.find(Apartment.class, id);
+            if (apartment1 == null) {
+                transaction.rollback();
+                throw new EntityNotFoundException("Apartment with id=" + id + " not found");
+            }
             session.remove(apartment1);
             transaction.commit();
         }

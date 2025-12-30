@@ -48,6 +48,10 @@ public class BuildingDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Building building1 = session.find(Building.class, id);
+            if (building1 == null) {
+                transaction.rollback();
+                throw new EntityNotFoundException("Building with id=" + id + " not found");
+            }
             session.remove(building1);
             transaction.commit();
         }

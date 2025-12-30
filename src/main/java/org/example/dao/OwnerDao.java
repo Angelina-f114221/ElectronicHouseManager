@@ -43,6 +43,10 @@ public class OwnerDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Owner owner1 = session.find(Owner.class, id);
+            if (owner1 == null) {
+                transaction.rollback();
+                throw new EntityNotFoundException("Owner with id=" + id + " not found");
+            }
             session.remove(owner1);
             transaction.commit();
         }

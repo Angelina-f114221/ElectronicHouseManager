@@ -3,7 +3,6 @@ package org.example.dao;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.Payment;
-import org.example.entity.Resident;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -44,6 +43,10 @@ public class PaymentDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Payment payment1 = session.find(Payment.class, id);
+            if (payment1 == null) {
+                transaction.rollback();
+                throw new EntityNotFoundException("Payment with id=" + id + " not found");
+            }
             session.remove(payment1);
             transaction.commit();
         }

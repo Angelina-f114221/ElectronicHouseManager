@@ -45,6 +45,10 @@ public class ResidentDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Resident resident1 = session.find(Resident.class, id);
+            if (resident1 == null) {
+                transaction.rollback();
+                throw new EntityNotFoundException("Resident with id=" + id + " not found");
+            }
             session.remove(resident1);
             transaction.commit();
         }

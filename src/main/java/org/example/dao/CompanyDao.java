@@ -65,6 +65,10 @@ public class CompanyDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Company company1 = session.find(Company.class, id);
+            if (company1 == null) {
+                transaction.rollback();
+                throw new EntityNotFoundException("Company with id=" + id + " not found");
+            }
             session.remove(company1);
             transaction.commit();
         }
