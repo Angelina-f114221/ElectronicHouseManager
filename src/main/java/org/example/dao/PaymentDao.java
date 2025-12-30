@@ -34,6 +34,9 @@ public class PaymentDao {
             try {
                 Payment payment1 = require(session, Payment.class, id);
                 payment1.setAmount(payment.getAmount());
+                payment1.setPayment_date(payment.getPayment_date());
+                payment1.setPeriod(payment.getPeriod());
+
                 transaction.commit();
             } catch (RuntimeException exception) {
                 transaction.rollback();
