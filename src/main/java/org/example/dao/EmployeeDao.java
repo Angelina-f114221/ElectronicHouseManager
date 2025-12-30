@@ -1,8 +1,8 @@
 package org.example.dao;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.EmployeeDto;
-import org.example.entity.Company;
 import org.example.entity.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -19,7 +19,7 @@ public class EmployeeDao {
     }
     public static List<Employee> getEmployees() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("SELECT а FROM Employee а", Employee.class)
+            return session.createQuery("SELECT a FROM Employee a", Employee.class)
                     .getResultList();
         }
     }
@@ -41,9 +41,12 @@ public class EmployeeDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Employee employee1 = session.find(Employee.class, id);
+            if  (employee1 == null) {
+                transaction.rollback();
+                throw new EntityNotFoundException("Employee with id=" + id + " not found");
+            }
             employee1.setName(employee.getName());
             employee1.setAge(employee.getAge());
-            session.persist(employee1);
             transaction.commit();
         }
     }

@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.Company;
 import org.hibernate.Session;
@@ -48,8 +49,11 @@ public class CompanyDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Company company1 = session.find(Company.class, id);
+            if (company1 == null) {
+                transaction.rollback();
+                throw new EntityNotFoundException("Company with id=" + id + " not found");
+            }
             company1.setName(company.getName());
-            session.persist(company1);
             transaction.commit();
         }
     }

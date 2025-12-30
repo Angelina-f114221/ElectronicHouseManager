@@ -1,8 +1,8 @@
 package org.example.dao;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.entity.Apartment;
-import org.example.entity.Company;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -31,10 +31,13 @@ public class ApartmentDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Apartment apartment1 = session.find(Apartment.class, id);
+            if (apartment1 == null) {
+                transaction.rollback();
+                throw new EntityNotFoundException("Apartment with id=" + id + " not found");
+            }
             apartment1.setArea(apartment.getArea());
             apartment1.setFloor(apartment.getFloor());
             apartment1.setNumber(apartment.getNumber());
-            session.persist(apartment1);
             transaction.commit();
         }
     }
