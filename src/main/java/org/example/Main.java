@@ -20,6 +20,5 @@ public class Main {
         // отварям сесията чрез session factory util класа. правя локална променлива и я използвам, за да се конектна към базата и след това да изпълнявам заявки към нея.
         Company company = new Company();
         company.setName("Apple");
-        CompanyDao.createCompany(company);
     }
 }

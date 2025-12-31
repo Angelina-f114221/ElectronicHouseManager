@@ -14,5 +14,5 @@ public class EmployeeDto {
     private long id;
     private String name;
     private int age;
-    private long companyId;
+    private Long companyId;
 }

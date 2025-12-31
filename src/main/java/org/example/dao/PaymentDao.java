@@ -1,6 +1,9 @@
 package org.example.dao;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
+import org.example.dto.PaymentDto;
+import org.example.entity.Apartment;
 import org.example.entity.Payment;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -10,32 +13,74 @@ import java.util.List;
 import static org.example.dao.DaoUtil.require;
 
 public class PaymentDao {
-    public static void createPayment(Payment payment) {
+
+    public static void createPayment(PaymentDto payment) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.persist(payment);
-            transaction.commit();
+            try {
+                Apartment apartment1 = require(session, Apartment.class, payment.getApartment_id());
+
+                Payment payment1 = new Payment();
+                payment1.setAmount(payment.getAmount());
+                payment1.setPayment_date(payment.getPayment_date());
+                payment1.setPeriod(payment.getPeriod());
+                payment1.setApartment(apartment1);
+
+                session.persist(payment1);
+                transaction.commit();
+            } catch (RuntimeException exception) {
+                transaction.rollback();
+                throw exception;
+            }
         }
     }
-    public static List<Payment> getPayments() {
+
+    public static List<PaymentDto> getPayments() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("SELECT p FROM Payment p", Payment.class)
-                    .getResultList();
+            return session.createQuery("""
+                SELECT new org.example.dto.PaymentDto(
+                    p.id,
+                    p.amount,
+                    p.payment_date,
+                    p.period,
+                    p.apartment.id
+                )
+                FROM Payment p
+            """, PaymentDto.class).getResultList();
         }
     }
-    public static Payment getPayment(long id) {
+
+    public static PaymentDto getPayment(long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.find(Payment.class, id);
+            return session.createQuery("""
+                SELECT new org.example.dto.PaymentDto(
+                    p.id,
+                    p.amount,
+                    p.payment_date,
+                    p.period,
+                    p.apartment.id
+                )
+                FROM Payment p
+                WHERE p.id = :id
+            """, PaymentDto.class)
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException("Payment with id=" + id + " not found"));
         }
     }
-    public static void updatePayment(long id, Payment payment) {
+
+    public static void updatePayment(long id, PaymentDto payment) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
                 Payment payment1 = require(session, Payment.class, id);
+                Apartment apartment1 = require(session, Apartment.class, payment.getApartment_id());
+
                 payment1.setAmount(payment.getAmount());
                 payment1.setPayment_date(payment.getPayment_date());
                 payment1.setPeriod(payment.getPeriod());
+                payment1.setApartment(apartment1);
 
                 transaction.commit();
             } catch (RuntimeException exception) {
@@ -44,6 +89,7 @@ public class PaymentDao {
             }
         }
     }
+
     public static void deletePayment(long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
