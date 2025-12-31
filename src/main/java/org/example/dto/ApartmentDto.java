@@ -15,5 +15,4 @@ public class ApartmentDto {
     private double area;
     private int pets_using_ca;
     private long building_id;
-    private long ownerId;
 }

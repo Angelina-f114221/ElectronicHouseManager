@@ -14,5 +14,5 @@ public class PaymentDto {
     private double amount;
     private LocalDate payment_date;
     private String period;
-    private long apartmentId;
+    private long apartment_id;
 }
