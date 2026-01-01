@@ -19,8 +19,15 @@ public class BuildingDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
-                Company company = require(session, Company.class, building.getCompanyId());
-                Employee employee = require(session, Employee.class, building.getEmployeeId());
+                Company company = null;
+                if (building.getCompanyId() != null && building.getCompanyId() > 0) {
+                    company = require(session, Company.class, building.getCompanyId());
+                }
+
+                Employee employee = null;
+                if (building.getEmployeeId() != null && building.getEmployeeId() > 0) {
+                    employee = require(session, Employee.class, building.getEmployeeId());
+                }
 
                 Building building1 = new Building();
                 building1.setName(building.getName());
@@ -59,10 +66,12 @@ public class BuildingDao {
                     b.fee_per_sqm,
                     b.fee_per_pet_using_ca,
                     b.fee_per_person_over_7_using_elevator,
-                    b.company.id,
-                    b.employee.id
+                    c.id,
+                    e.id
                 )
                 FROM Building b
+                LEFT JOIN b.company c
+                LEFT JOIN b.employee e
             """, BuildingDto.class).getResultList();
         }
     }
@@ -81,10 +90,12 @@ public class BuildingDao {
                     b.fee_per_sqm,
                     b.fee_per_pet_using_ca,
                     b.fee_per_person_over_7_using_elevator,
-                    b.company.id,
-                    b.employee.id
+                    c.id,
+                    e.id
                 )
                 FROM Building b
+                LEFT JOIN b.company c
+                LEFT JOIN b.employee e
                 WHERE b.id = :id
             """, BuildingDto.class)
                     .setParameter("id", id)
@@ -100,8 +111,15 @@ public class BuildingDao {
             try {
                 Building building1 = require(session, Building.class, id);
 
-                Company company = require(session, Company.class, building.getCompanyId());
-                Employee employee = require(session, Employee.class, building.getEmployeeId());
+                Company company = null;
+                if (building.getCompanyId() != null && building.getCompanyId() > 0) {
+                    company = require(session, Company.class, building.getCompanyId());
+                }
+
+                Employee employee = null;
+                if (building.getEmployeeId() != null && building.getEmployeeId() > 0) {
+                    employee = require(session, Employee.class, building.getEmployeeId());
+                }
 
                 building1.setName(building.getName());
                 building1.setFloors(building.getFloors());

@@ -22,6 +22,6 @@ public class BuildingDto {
     private double fee_per_pet_using_ca;
     private double fee_per_person_over_7_using_elevator;
 
-    private long companyId;
-    private long employeeId;
+    private Long companyId;
+    private Long employeeId;
 }

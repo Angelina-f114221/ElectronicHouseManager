@@ -14,11 +14,11 @@ public class BillingService {
 
             long residents = BillingDao.countResidentsOver7UsingElevator(session, apartmentId);
 
-            double feeArea = apartment1.getArea() * apartment1.getBuilding().getFee_per_sqm();
-            double feePets = apartment1.getPets_using_ca() * apartment1.getBuilding().getFee_per_pet_using_ca();
-            double feeElevator = residents * apartment1.getBuilding().getFee_per_person_over_7_using_elevator();
+            double fee_area = apartment1.getArea() * apartment1.getBuilding().getFee_per_sqm();
+            double fee_pets = apartment1.getPets_using_ca() * apartment1.getBuilding().getFee_per_pet_using_ca();
+            double fee_elevator = residents * apartment1.getBuilding().getFee_per_person_over_7_using_elevator();
 
-            return feeArea + feePets + feeElevator;
+            return fee_area + fee_pets + fee_elevator;
         }
     }
 }

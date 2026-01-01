@@ -1,5 +1,5 @@
 package org.example.dao;
-// commit 2
+
 import org.hibernate.Session;
 
 public class BillingDao {

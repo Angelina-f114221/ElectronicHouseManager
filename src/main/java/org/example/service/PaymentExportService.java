@@ -1,8 +1,9 @@
 package org.example.service;
-// commit 2
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class PaymentExportService {
 
@@ -13,15 +14,17 @@ public class PaymentExportService {
             String buildingName,
             long apartmentId,
             double amount,
-            String paymentDate
+            LocalDate paymentDate
     ) {
+        String dateStr = (paymentDate == null) ? "" : paymentDate.toString();
+
         String line = String.join(",",
                 companyName,
                 employeeName,
                 buildingName,
                 String.valueOf(apartmentId),
                 String.valueOf(amount),
-                paymentDate
+                dateStr
         );
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
