@@ -1,6 +1,9 @@
 package org.example.dto;
 
 import lombok.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @AllArgsConstructor
 @Getter
@@ -12,7 +15,10 @@ import lombok.*;
  */
 public class EmployeeDto {
     private long id;
+    @NotBlank(message = "Employee name is required")
+    @Size(min = 2, max = 60)
     private String name;
+    @Min(value = 0, message = "Age must be >= 0")
     private int age;
     private Long companyId;
 }

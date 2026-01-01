@@ -6,6 +6,7 @@ import org.example.dto.OwnerDto;
 import org.example.entity.Owner;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.example.service.ValidationUtil;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import static org.example.dao.DaoUtil.require;
 public class OwnerDao {
 
     public static void createOwner(OwnerDto owner) {
+        ValidationUtil.validateOrThrow(owner);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
@@ -62,6 +64,7 @@ public class OwnerDao {
     }
 
     public static void updateOwner(long id, OwnerDto owner) {
+        ValidationUtil.validateOrThrow(owner);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {

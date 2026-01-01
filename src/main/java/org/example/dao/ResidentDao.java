@@ -7,6 +7,7 @@ import org.example.entity.Apartment;
 import org.example.entity.Resident;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.example.service.ValidationUtil;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import static org.example.dao.DaoUtil.require;
 public class ResidentDao {
 
     public static void createResident(ResidentDto resident) {
+        ValidationUtil.validateOrThrow(resident);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
@@ -74,6 +76,7 @@ public class ResidentDao {
     }
 
     public static void updateResident(long id, ResidentDto resident) {
+        ValidationUtil.validateOrThrow(resident);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {

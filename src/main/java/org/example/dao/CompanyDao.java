@@ -6,6 +6,7 @@ import org.example.dto.CompanyDto;
 import org.example.entity.Company;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.example.service.ValidationUtil;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import static org.example.dao.DaoUtil.require;
 public class CompanyDao {
     // заявка за създаване на компания. Ще бъде в статичен контекст, методът има нужда от данните за обекта компания. като стратегия се подава модел, от който данните се взимат. Ще използвам обекта session, за да отворя сесията и конекцията към базата. За да създам компанията се използва обекта трансакция, който се вижда от Object Relational Mapping технологията. това е изпълнение на заявки - всички общо или нито една – със заключително действие. То може да е commit и да променя състоянието на базата или да е ролбек - ако някакво изключение се хвърли. ще използвам трансакцията, за да запиша подадения като аргумент обект company през отворената сесия. И накрая имам commit на трансакцията,
     public static void createCompany(CompanyDto company) {
+        ValidationUtil.validateOrThrow(company);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
@@ -73,6 +75,7 @@ public class CompanyDao {
 
      */
     public static void updateCompany(long id, CompanyDto company) {
+        ValidationUtil.validateOrThrow(company);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
@@ -90,6 +93,7 @@ public class CompanyDao {
     правя операцията Delete, като намирам обекта по ID-то и след това го изтривам. Като открия обекта с find метода през session, няма да сетвам никакви стойности на нейните полета. вместо да извикам метода persist, ще извикам метода remove.
      */
     public static void deleteCompany(long id) {
+        if (id <= 0) throw new IllegalArgumentException("Company id must be > 0");
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {

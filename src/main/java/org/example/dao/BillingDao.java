@@ -5,6 +5,9 @@ import org.hibernate.Session;
 public class BillingDao {
 
     public static long countResidentsOver7UsingElevator(Session session, long apartmentId) {
+        if (apartmentId <= 0) {
+            throw new IllegalArgumentException("apartmentId must be > 0");
+        }
         return session.createQuery("""
             SELECT COUNT(r.id)
             FROM Resident r

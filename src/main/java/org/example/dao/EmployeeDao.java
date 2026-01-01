@@ -7,6 +7,7 @@ import org.example.entity.Company;
 import org.example.entity.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.example.service.ValidationUtil;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import static org.example.dao.DaoUtil.require;
 public class EmployeeDao {
 
     public static void createEmployee(EmployeeDto employee) {
+        ValidationUtil.validateOrThrow(employee);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
@@ -73,6 +75,7 @@ public class EmployeeDao {
     }
 
     public static void updateEmployee(long id, EmployeeDto employee) {
+        ValidationUtil.validateOrThrow(employee);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {

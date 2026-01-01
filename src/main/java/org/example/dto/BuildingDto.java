@@ -1,5 +1,6 @@
 package org.example.dto;
 
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -12,15 +13,21 @@ import java.time.LocalDate;
 
 public class BuildingDto {
     private long id;
+    @NotBlank
+    @Size(min = 2, max = 30)
     private String name;
+    @Min(1)
     private int floors;
+    @NotBlank
+    @Size(min = 5, max = 50)
     private String address;
-    private double common_areas;
-    private double total_areas;
+    @PositiveOrZero private double common_areas;
+    @PositiveOrZero private double total_areas;
+    @PastOrPresent
     private LocalDate contract_start_date;
-    private double fee_per_sqm;
-    private double fee_per_pet_using_ca;
-    private double fee_per_person_over_7_using_elevator;
+    @PositiveOrZero private double fee_per_sqm;
+    @PositiveOrZero private double fee_per_pet_using_ca;
+    @PositiveOrZero private double fee_per_person_over_7_using_elevator;
 
     private Long companyId;
     private Long employeeId;

@@ -7,6 +7,7 @@ import org.example.entity.Apartment;
 import org.example.entity.Building;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.example.service.ValidationUtil;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import static org.example.dao.DaoUtil.require;
 public class ApartmentDao {
 
     public static void createApartment(ApartmentDto apartment) {
+        ValidationUtil.validateOrThrow(apartment);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
@@ -74,6 +76,7 @@ public class ApartmentDao {
     }
 
     public static void updateApartment(long id, ApartmentDto apartment) {
+        ValidationUtil.validateOrThrow(apartment);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
@@ -95,6 +98,9 @@ public class ApartmentDao {
     }
 
     public static void deleteApartment(long id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Apartment id must be > 0");
+        }
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {

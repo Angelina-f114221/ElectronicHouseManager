@@ -1,6 +1,9 @@
 package org.example.dto;
 
 import lombok.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
 
@@ -10,7 +13,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 
 public class PayRequestDto {
+    @Positive
     private long apartmentId;
+    @Positive
     private double amount;
+    @NotNull
+    @PastOrPresent
     private LocalDate paymentDate;
 }
