@@ -2,6 +2,8 @@ package org.example.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -11,5 +13,9 @@ import lombok.*;
 public class CompanyIncomeDto {
     private long companyId;
     private String companyName;
-    private double income;   // SUM(p.amount)
+    private BigDecimal income;
+
+    public CompanyIncomeDto(long id, String name, Number income) {
+        this(id, name, income != null ? BigDecimal.valueOf(income.doubleValue()) : BigDecimal.ZERO);
+    }
 }

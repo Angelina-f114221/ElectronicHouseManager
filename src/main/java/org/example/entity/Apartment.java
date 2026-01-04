@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
@@ -17,7 +18,7 @@ import java.util.Set;
 public class Apartment extends BaseEntity {
     private int floor;
     private int number;
-    private double area;
+    private BigDecimal area;
     private int pets_using_ca;
 
     @ManyToMany(mappedBy = "apartments")

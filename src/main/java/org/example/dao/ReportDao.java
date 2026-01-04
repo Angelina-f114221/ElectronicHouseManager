@@ -113,7 +113,7 @@ public class ReportDao {
                 SELECT new org.example.dto.AmountByKeyDto(
                     b.id,
                     b.name,
-                    COALESCE(SUM(p.amount), 0)
+                    COALESCE(SUM(p.amount), 0.0)
                 )
                 FROM Building b
                 LEFT JOIN b.apartments a
@@ -135,7 +135,7 @@ public class ReportDao {
                 SELECT new org.example.dto.AmountByKeyDto(
                     e.id,
                     e.name,
-                    COALESCE(SUM(p.amount), 0)
+                    COALESCE(SUM(p.amount), 0.0)
                 )
                 FROM Employee e
                 LEFT JOIN e.buildings b

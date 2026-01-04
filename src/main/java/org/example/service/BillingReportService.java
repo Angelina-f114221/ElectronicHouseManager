@@ -3,9 +3,12 @@ package org.example.service;
 import org.example.configuration.SessionFactoryUtil;
 import org.hibernate.Session;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 public class BillingReportService {
 
-    public static double getDueSumForBuilding(long buildingId) {
+    public static BigDecimal getDueSumForBuilding(long buildingId) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             var apartmentIds = session.createQuery("""
                 SELECT a.id
@@ -13,15 +16,15 @@ public class BillingReportService {
                 WHERE a.building.id = :buildingId
             """, Long.class).setParameter("buildingId", buildingId).getResultList();
 
-            double total = 0.0;
+            BigDecimal total = BigDecimal.ZERO;
             for (Long id : apartmentIds) {
-                total += BillingService.calculateMonthlyFeeForApartment(id);
+                total = total.add(BillingService.calculateMonthlyFeeForApartment(id));
             }
             return total;
         }
     }
 
-    public static double getDueSumForCompany(long companyId) {
+    public static BigDecimal getDueSumForCompany(long companyId) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             var apartmentIds = session.createQuery("""
                 SELECT a.id
@@ -29,15 +32,15 @@ public class BillingReportService {
                 WHERE a.building.company.id = :companyId
             """, Long.class).setParameter("companyId", companyId).getResultList();
 
-            double total = 0.0;
+            BigDecimal total = BigDecimal.ZERO;
             for (Long id : apartmentIds) {
-                total += BillingService.calculateMonthlyFeeForApartment(id);
+                total = total.add(BillingService.calculateMonthlyFeeForApartment(id));
             }
             return total;
         }
     }
 
-    public static double getDueSumForEmployee(long employeeId) {
+    public static BigDecimal getDueSumForEmployee(long employeeId) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             var apartmentIds = session.createQuery("""
                 SELECT a.id
@@ -45,9 +48,9 @@ public class BillingReportService {
                 WHERE a.building.employee.id = :employeeId
             """, Long.class).setParameter("employeeId", employeeId).getResultList();
 
-            double total = 0.0;
+            BigDecimal total = BigDecimal.ZERO;
             for (Long id : apartmentIds) {
-                total += BillingService.calculateMonthlyFeeForApartment(id);
+                total = total.add(BillingService.calculateMonthlyFeeForApartment(id));
             }
             return total;
         }

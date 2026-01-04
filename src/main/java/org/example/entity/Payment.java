@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString(callSuper=true)
 public class Payment extends BaseEntity {
-    private double amount;
+    private BigDecimal amount;
     private LocalDate payment_date;
     private String period;
 

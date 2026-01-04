@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -19,12 +20,12 @@ public class Building extends BaseEntity {
     private String name;
     private int floors;
     private String address;
-    private double common_areas;
-    private double total_areas;
+    private BigDecimal common_areas;
+    private BigDecimal total_areas;
     private LocalDate contract_start_date;
-    private double fee_per_sqm;
-    private double fee_per_pet_using_ca;
-    private double fee_per_person_over_7_using_elevator;
+    private BigDecimal fee_per_sqm;
+    private BigDecimal fee_per_pet_using_ca;
+    private BigDecimal fee_per_person_over_7_using_elevator;
 
     @OneToMany(mappedBy = "building")
     @ToString.Exclude

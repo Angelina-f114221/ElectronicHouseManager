@@ -16,14 +16,14 @@ public class FilterSortDao {
                 SELECT new org.example.dto.CompanyIncomeDto(
                     c.id,
                     c.name,
-                    COALESCE(SUM(p.amount), 0)
+                    COALESCE(SUM(p.amount), 0.0)
                 )
                 FROM Company c
                 LEFT JOIN c.buildings b
                 LEFT JOIN b.apartments a
                 LEFT JOIN a.payments p
                 GROUP BY c.id, c.name
-                ORDER BY COALESCE(SUM(p.amount), 0) DESC
+                ORDER BY COALESCE(SUM(p.amount), 0.0) DESC
             """, CompanyIncomeDto.class).getResultList();
         }
     }

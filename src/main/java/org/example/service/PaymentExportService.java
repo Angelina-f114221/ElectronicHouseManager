@@ -3,6 +3,7 @@ package org.example.service;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class PaymentExportService {
@@ -13,7 +14,7 @@ public class PaymentExportService {
             String employeeName,
             String buildingName,
             long apartmentId,
-            double amount,
+            BigDecimal amount,
             LocalDate paymentDate
     ) {
         String dateStr = (paymentDate == null) ? "" : paymentDate.toString();

@@ -3,6 +3,7 @@ package org.example.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -21,13 +22,13 @@ public class BuildingDto {
     @NotBlank
     @Size(min = 5, max = 50)
     private String address;
-    @PositiveOrZero private double common_areas;
-    @PositiveOrZero private double total_areas;
+    @PositiveOrZero private BigDecimal common_areas;
+    @PositiveOrZero private BigDecimal total_areas;
     @PastOrPresent
     private LocalDate contract_start_date;
-    @PositiveOrZero private double fee_per_sqm;
-    @PositiveOrZero private double fee_per_pet_using_ca;
-    @PositiveOrZero private double fee_per_person_over_7_using_elevator;
+    @PositiveOrZero private BigDecimal fee_per_sqm;
+    @PositiveOrZero private BigDecimal fee_per_pet_using_ca;
+    @PositiveOrZero private BigDecimal fee_per_person_over_7_using_elevator;
 
     private Long company_id;
     @NotNull

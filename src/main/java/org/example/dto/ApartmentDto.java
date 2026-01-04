@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -18,7 +20,7 @@ public class ApartmentDto {
     @Min(value = 0, message = "Floor must be >= 0")
     private int floor;
     @Positive(message = "Area must be > 0")
-    private double area;
+    private BigDecimal area;
     @PositiveOrZero(message = "Pets using common areas must be >= 0")
     private int pets_using_ca;
     @Positive(message = "Building id must be > 0")

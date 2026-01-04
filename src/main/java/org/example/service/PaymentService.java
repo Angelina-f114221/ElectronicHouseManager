@@ -11,6 +11,7 @@ import org.example.entity.Payment;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
@@ -23,7 +24,7 @@ public class PaymentService {
         String employeeName;
         String buildingName;
         long apartmentId;
-        double amount;
+        BigDecimal amount;
         LocalDate paymentDate;
 
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
@@ -40,7 +41,7 @@ public class PaymentService {
 
                 amount = BillingService.calculateMonthlyFeeForApartment(apartment.getId());
                 paymentDate = req.getPayment_date();
-                String period = YearMonth.from(paymentDate).toString(); // yyyy-MM [web:1871]
+                String period = YearMonth.from(paymentDate).toString();
 
                 Payment payment = new Payment();
                 payment.setApartment(apartment);

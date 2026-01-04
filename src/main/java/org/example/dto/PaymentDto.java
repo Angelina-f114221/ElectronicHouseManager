@@ -3,6 +3,7 @@ package org.example.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 public class PaymentDto {
     private long id;
     @Positive
-    private double amount;
+    private BigDecimal amount;
     @NotNull
     @PastOrPresent
     private LocalDate payment_date;
