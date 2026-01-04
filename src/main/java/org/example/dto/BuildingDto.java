@@ -29,6 +29,8 @@ public class BuildingDto {
     @PositiveOrZero private double fee_per_pet_using_ca;
     @PositiveOrZero private double fee_per_person_over_7_using_elevator;
 
-    private Long companyId;
-    private Long employeeId;
+    private Long company_id;
+    @NotNull
+    @Positive
+    private Long employee_id;
 }

@@ -6,7 +6,7 @@ public class BillingDao {
 
     public static long countResidentsOver7UsingElevator(Session session, long apartmentId) {
         if (apartmentId <= 0) {
-            throw new IllegalArgumentException("apartmentId must be > 0");
+            throw new IllegalArgumentException("apartment_id must be > 0");
         }
         return session.createQuery("""
             SELECT COUNT(r.id)
@@ -15,7 +15,7 @@ public class BillingDao {
               AND r.age > 7
               AND r.uses_elevator = true
         """, Long.class)
-                .setParameter("apartmentId", apartmentId)
+                .setParameter("apartment_id", apartmentId)
                 .getSingleResult();
     }
 }

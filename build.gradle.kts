@@ -16,6 +16,7 @@ dependencies {
     implementation ("org.apache.logging.log4j:log4j-core:2.17.1")
     implementation("org.hibernate.validator:hibernate-validator:9.0.0.Final")
     implementation("jakarta.validation:jakarta.validation-api:3.1.1")
+    implementation("org.glassfish.expressly:expressly:6.0.0")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

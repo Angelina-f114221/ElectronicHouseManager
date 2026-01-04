@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.AmountByKeyDto;
 import org.example.dto.IdNameDto;
@@ -99,7 +100,10 @@ public class ReportDao {
                 GROUP BY c.id, c.name
             """, AmountByKeyDto.class)
                     .setParameter("companyId", companyId)
-                    .getSingleResult();
+                    .getResultStream()
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException("... not found"));
+
         }
     }
 
@@ -118,7 +122,10 @@ public class ReportDao {
                 GROUP BY b.id, b.name
             """, AmountByKeyDto.class)
                     .setParameter("buildingId", buildingId)
-                    .getSingleResult();
+                    .getResultStream()
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException("... not found"));
+
         }
     }
 
@@ -138,7 +145,10 @@ public class ReportDao {
                 GROUP BY e.id, e.name
             """, AmountByKeyDto.class)
                     .setParameter("employeeId", employeeId)
-                    .getSingleResult();
+                    .getResultStream()
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException("... not found"));
+
         }
     }
 }

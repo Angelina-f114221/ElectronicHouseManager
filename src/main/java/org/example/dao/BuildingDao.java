@@ -22,14 +22,11 @@ public class BuildingDao {
             Transaction transaction = session.beginTransaction();
             try {
                 Company company = null;
-                if (building.getCompanyId() != null && building.getCompanyId() > 0) {
-                    company = require(session, Company.class, building.getCompanyId());
+                if (building.getCompany_id() != null && building.getCompany_id() > 0) {
+                    company = require(session, Company.class, building.getCompany_id());
                 }
 
-                Employee employee = null;
-                if (building.getEmployeeId() != null && building.getEmployeeId() > 0) {
-                    employee = require(session, Employee.class, building.getEmployeeId());
-                }
+                Employee employee = require(session, Employee.class, building.getEmployee_id());
 
                 Building building1 = new Building();
                 building1.setName(building.getName());
@@ -115,14 +112,11 @@ public class BuildingDao {
                 Building building1 = require(session, Building.class, id);
 
                 Company company = null;
-                if (building.getCompanyId() != null && building.getCompanyId() > 0) {
-                    company = require(session, Company.class, building.getCompanyId());
+                if (building.getCompany_id() != null && building.getCompany_id() > 0) {
+                    company = require(session, Company.class, building.getCompany_id());
                 }
 
-                Employee employee = null;
-                if (building.getEmployeeId() != null && building.getEmployeeId() > 0) {
-                    employee = require(session, Employee.class, building.getEmployeeId());
-                }
+                Employee employee = require(session, Employee.class, building.getEmployee_id());
 
                 building1.setName(building.getName());
                 building1.setFloors(building.getFloors());
@@ -146,7 +140,6 @@ public class BuildingDao {
     }
 
     public static void deleteBuilding(long id) {
-        if (id <= 0) throw new IllegalArgumentException("Building id must be > 0");
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {

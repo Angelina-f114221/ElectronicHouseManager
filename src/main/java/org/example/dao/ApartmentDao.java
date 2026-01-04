@@ -98,9 +98,6 @@ public class ApartmentDao {
     }
 
     public static void deleteApartment(long id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("Apartment id must be > 0");
-        }
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {

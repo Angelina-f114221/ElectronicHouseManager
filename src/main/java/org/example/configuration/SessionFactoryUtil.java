@@ -17,8 +17,9 @@ public class SessionFactoryUtil {
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
+            Configuration configuration = new Configuration()
+                    .configure();
             // свързва ентити модела със съответната му таблица
-            Configuration configuration = new Configuration();
             configuration.addAnnotatedClass(Apartment.class);
             configuration.addAnnotatedClass(Building.class);
             configuration.addAnnotatedClass(Company.class);
