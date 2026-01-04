@@ -6,6 +6,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 /*
 конфигурирам как се отваря сесията, за да се изпълни конекция към базата. включва се object relational mapping технологията, която ни служи за връзка между релационния и обектноориентирания модел, за да мога да отворя сесията.
 технологичните компоненти, които дават връзка между Java и базата, са по стандарта JDBC. Hibernate технологията като object relation ping надгражда над този междинен слой между релационния и обектноориентирания модел, като добавя абстрактни класове и методи за изпълнение на основни операции за трансакционно поведение, за отваряне на сесии, за стратегии за автоматизирано генериране на първичните ключове. Session Factory класът е от външната зависимост Hibernate. От тази зависимост мога да изпълнявам трансакции, да отварям сесия, да я затварям, да конфигурирам какво ще бъде проследено като клас и респективно таблица в базата. използвам configuration от Session Factory, за да билдна сесията през предварително дефиниран билдър и да се отвори сесията.
@@ -17,8 +20,21 @@ public class SessionFactoryUtil {
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
-            Configuration configuration = new Configuration()
-                    .configure();
+            Configuration configuration = new Configuration();
+
+            Properties props = new Properties();
+            try (InputStream in = SessionFactoryUtil.class.getClassLoader()
+                    .getResourceAsStream("hibernate.properties")) {
+                if (in == null) {
+                    throw new IllegalStateException("Missing resource: hibernate.properties");
+                }
+                props.load(in);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to load hibernate.properties", e);
+            }
+
+            configuration.setProperties(props);
+
             // свързва ентити модела със съответната му таблица
             configuration.addAnnotatedClass(Apartment.class);
             configuration.addAnnotatedClass(Building.class);
