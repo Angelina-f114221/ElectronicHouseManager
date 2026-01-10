@@ -21,10 +21,12 @@ public class ResidentDto {
     private String name;
     @Min(0)
     private int age;
+    @NotBlank
     private boolean uses_elevator;
     @NotNull
     @PastOrPresent
     private LocalDate contract_start;
     @Positive
-    private long apartmentId;
+    @NotNull
+    private long apartment_id;
 }

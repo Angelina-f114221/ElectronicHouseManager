@@ -10,81 +10,81 @@ import java.util.List;
 
 public class ReportDao {
 
-    public static List<IdNameDto> getBuildingsByEmployeeInCompany(long companyId, long employeeId) {
+    public static List<IdNameDto> getBuildingsByEmployeeInCompany(long company_id, long employee_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery("""
                 SELECT new org.example.dto.IdNameDto(b.id, b.name)
                 FROM Building b
-                WHERE b.company.id = :companyId AND b.employee.id = :employeeId
+                WHERE b.company.id = :company_id AND b.employee.id = :employee_id
             """, IdNameDto.class)
-                    .setParameter("companyId", companyId)
-                    .setParameter("employeeId", employeeId)
+                    .setParameter("company_id", company_id)
+                    .setParameter("employee_id", employee_id)
                     .getResultList();
         }
     }
 
-    public static long countBuildingsByEmployeeInCompany(long companyId, long employeeId) {
+    public static long countBuildingsByEmployeeInCompany(long company_id, long employee_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery("""
                 SELECT COUNT(b.id)
                 FROM Building b
-                WHERE b.company.id = :companyId AND b.employee.id = :employeeId
+                WHERE b.company.id = :company_id AND b.employee.id = :employee_id
             """, Long.class)
-                    .setParameter("companyId", companyId)
-                    .setParameter("employeeId", employeeId)
+                    .setParameter("company_id", company_id)
+                    .setParameter("employee_id", employee_id)
                     .getSingleResult();
         }
     }
 
-    public static List<Long> getApartmentIdsInBuilding(long buildingId) {
+    public static List<Long> getApartmentIdsInBuilding(long building_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery("""
                 SELECT a.id
                 FROM Apartment a
-                WHERE a.building.id = :buildingId
+                WHERE a.building.id = :building_id
             """, Long.class)
-                    .setParameter("buildingId", buildingId)
+                    .setParameter("building_id", building_id)
                     .getResultList();
         }
     }
 
-    public static long countApartmentsInBuilding(long buildingId) {
+    public static long countApartmentsInBuilding(long building_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery("""
                 SELECT COUNT(a.id)
                 FROM Apartment a
-                WHERE a.building.id = :buildingId
+                WHERE a.building.id = :building_id
             """, Long.class)
-                    .setParameter("buildingId", buildingId)
+                    .setParameter("building_id", building_id)
                     .getSingleResult();
         }
     }
 
-    public static List<IdNameDto> getResidentsInBuilding(long buildingId) {
+    public static List<IdNameDto> getResidentsInBuilding(long building_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery("""
                 SELECT new org.example.dto.IdNameDto(r.id, r.name)
                 FROM Resident r
-                WHERE r.apartment.building.id = :buildingId
+                WHERE r.apartment.building.id = :building_id
             """, IdNameDto.class)
-                    .setParameter("buildingId", buildingId)
+                    .setParameter("building_id", building_id)
                     .getResultList();
         }
     }
 
-    public static long countResidentsInBuilding(long buildingId) {
+    public static long countResidentsInBuilding(long building_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery("""
                 SELECT COUNT(r.id)
                 FROM Resident r
-                WHERE r.apartment.building.id = :buildingId
+                WHERE r.apartment.building.id = :building_id
             """, Long.class)
-                    .setParameter("buildingId", buildingId)
+                    .setParameter("building_id", building_id)
                     .getSingleResult();
         }
     }
 
-    public static AmountByKeyDto getPaidSumForCompany(long companyId) {
+    public static AmountByKeyDto getPaidSumForCompany(long company_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery("""
                 SELECT new org.example.dto.AmountByKeyDto(
@@ -96,10 +96,10 @@ public class ReportDao {
                 LEFT JOIN c.buildings b
                 LEFT JOIN b.apartments a
                 LEFT JOIN a.payments p
-                WHERE c.id = :companyId
+                WHERE c.id = :company_id
                 GROUP BY c.id, c.name
             """, AmountByKeyDto.class)
-                    .setParameter("companyId", companyId)
+                    .setParameter("company_id", company_id)
                     .getResultStream()
                     .findFirst()
                     .orElseThrow(() -> new EntityNotFoundException("... not found"));
@@ -107,7 +107,7 @@ public class ReportDao {
         }
     }
 
-    public static AmountByKeyDto getPaidSumForBuilding(long buildingId) {
+    public static AmountByKeyDto getPaidSumForBuilding(long building_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery("""
                 SELECT new org.example.dto.AmountByKeyDto(
@@ -118,10 +118,10 @@ public class ReportDao {
                 FROM Building b
                 LEFT JOIN b.apartments a
                 LEFT JOIN a.payments p
-                WHERE b.id = :buildingId
+                WHERE b.id = :building_id
                 GROUP BY b.id, b.name
             """, AmountByKeyDto.class)
-                    .setParameter("buildingId", buildingId)
+                    .setParameter("building_id", building_id)
                     .getResultStream()
                     .findFirst()
                     .orElseThrow(() -> new EntityNotFoundException("... not found"));
@@ -129,7 +129,7 @@ public class ReportDao {
         }
     }
 
-    public static AmountByKeyDto getPaidSumForEmployee(long employeeId) {
+    public static AmountByKeyDto getPaidSumForEmployee(long employee_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery("""
                 SELECT new org.example.dto.AmountByKeyDto(
@@ -141,10 +141,10 @@ public class ReportDao {
                 LEFT JOIN e.buildings b
                 LEFT JOIN b.apartments a
                 LEFT JOIN a.payments p
-                WHERE e.id = :employeeId
+                WHERE e.id = :employee_id
                 GROUP BY e.id, e.name
             """, AmountByKeyDto.class)
-                    .setParameter("employeeId", employeeId)
+                    .setParameter("employee_id", employee_id)
                     .getResultStream()
                     .findFirst()
                     .orElseThrow(() -> new EntityNotFoundException("... not found"));

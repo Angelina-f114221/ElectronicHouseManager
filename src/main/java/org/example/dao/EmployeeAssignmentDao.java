@@ -6,28 +6,28 @@ import org.hibernate.Session;
 
 public class EmployeeAssignmentDao {
 
-    public static Employee getLeastLoadedEmployee(Session session, long companyId) {
-        if (companyId <= 0) {
-            throw new IllegalArgumentException("companyId must be > 0");
+    public static Employee getLeastLoadedEmployee(Session session, long company_id) {
+        if (company_id <= 0) {
+            throw new IllegalArgumentException("company_id must be > 0");
         }
         return session.createQuery("""
         SELECT e
         FROM Employee e
         LEFT JOIN e.buildings b
-        WHERE e.company.id = :companyId
+        WHERE e.company.id = :company_id
         GROUP BY e
         ORDER BY COUNT(b.id) ASC, e.id ASC
     """, Employee.class)
-                .setParameter("companyId", companyId)
+                .setParameter("company_id", company_id)
                 .setMaxResults(1)
                 .getResultStream()
                 .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("No employees found for companyId=" + companyId));
+                .orElseThrow(() -> new EntityNotFoundException("No employees found for company_id=" + company_id));
 
     }
-    public static Employee getLeastLoadedEmployee(Session session, long companyId, long excludeEmployeeId) {
-        if (companyId <= 0) {
-            throw new IllegalArgumentException("companyId must be > 0");
+    public static Employee getLeastLoadedEmployee(Session session, long company_id, long excludeEmployeeId) {
+        if (company_id <= 0) {
+            throw new IllegalArgumentException("company_id must be > 0");
         }
         if (excludeEmployeeId <= 0) {
             throw new IllegalArgumentException("excludeEmployeeId must be > 0");
@@ -36,18 +36,18 @@ public class EmployeeAssignmentDao {
             SELECT e
             FROM Employee e
             LEFT JOIN e.buildings b
-            WHERE e.company.id = :companyId
+            WHERE e.company.id = :company_id
               AND e.id <> :excludeEmployeeId
             GROUP BY e
             ORDER BY COUNT(b.id) ASC, e.id ASC
         """, Employee.class)
-                .setParameter("companyId", companyId)
+                .setParameter("company_id", company_id)
                 .setParameter("excludeEmployeeId", excludeEmployeeId)
                 .setMaxResults(1)
                 .getResultStream()
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No employees found for companyId=" + companyId
+                        "No employees found for company_id=" + company_id
                 ));
     }
 }

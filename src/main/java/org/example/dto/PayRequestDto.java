@@ -14,6 +14,7 @@ import java.time.LocalDate;
 
 public class PayRequestDto {
     @Positive
+    @NotNull
     private long apartment_id;
     @NotNull
     @PastOrPresent

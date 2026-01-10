@@ -20,7 +20,7 @@ public class ResidentDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
-                Apartment apartment1 = require(session, Apartment.class, resident.getApartmentId());
+                Apartment apartment1 = require(session, Apartment.class, resident.getApartment_id());
 
                 Resident resident1 = new Resident();
                 resident1.setName(resident.getName());
@@ -81,7 +81,7 @@ public class ResidentDao {
             Transaction transaction = session.beginTransaction();
             try {
                 Resident resident1 = require(session, Resident.class, id);
-                Apartment apartment1 = require(session, Apartment.class, resident.getApartmentId());
+                Apartment apartment1 = require(session, Apartment.class, resident.getApartment_id());
 
                 resident1.setName(resident.getName());
                 resident1.setAge(resident.getAge());

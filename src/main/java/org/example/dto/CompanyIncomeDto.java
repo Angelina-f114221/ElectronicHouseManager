@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 
 public class CompanyIncomeDto {
-    private long companyId;
-    private String companyName;
+    private long company_id;
+    private String company_name;
     private BigDecimal income;
 
     public CompanyIncomeDto(long id, String name, Number income) {

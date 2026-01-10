@@ -29,7 +29,8 @@ public class BuildingDto {
     @PositiveOrZero private BigDecimal fee_per_sqm;
     @PositiveOrZero private BigDecimal fee_per_pet_using_ca;
     @PositiveOrZero private BigDecimal fee_per_person_over_7_using_elevator;
-
+    @NotNull
+    @Positive
     private Long company_id;
     @NotNull
     @Positive

@@ -1,9 +1,7 @@
 package org.example.dto;
 
+import jakarta.validation.constraints.*;
 import lombok.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @AllArgsConstructor
 @Getter
@@ -11,14 +9,16 @@ import jakarta.validation.constraints.Size;
 @ToString
 @NoArgsConstructor
 /*
-правя още един пакет, в който да включа други модели, които използват ентити моделите и комбинират свойствата им гъвкаво, без да ги променят.  Последното е важно, защото те са част от persistence layer и са свързани с таблиците. Трябва да работя с DTO модели - data transfer objects. това е overengineering. искам да бъда на абстрактното ниво, на което е сървисът. понеже служителят ми има повече свойства, отколкото компанията, ще го ползвам за отправна точка. ще направя този employee DTO модел, който няма да бъде ентити и свързано директно с таблица, а ще бъде само за да изпълнявам заявките като резултат. DAO layer-a вече трябва да работи с dto обектите. DTO трябва да има конструктор, който да позволява да бъдат записани свойствата и да бъде направена връзката между ентити модела и DTO модела. DTO моделът е за да получавам резултати от заявки, за да ъпдейтвам свойства и да създавам нови записи в таблици, когато имплементирам DAO layer.
+тип модел, който използва ентити моделите и комбинира свойствата им гъвкаво, без да ги променя. Последното е важно, защото те са част от persistence layer и са свързани с таблиците. Трябва да работя с DTO модели - data transfer objects. искам да бъда на абстрактното ниво, на което е сървисът. направя този employee DTO модел, който няма да бъде ентити и свързано директно с таблица, а ще бъде само за да изпълнявам заявките като резултат. DAO layer-a вече трябва да работи с dto обектите. DTO трябва да има конструктор, който да позволява да бъдат записани свойствата и да бъде направена връзката между ентити модела и DTO модела. DTO моделът е за да получавам резултати от заявки, за да ъпдейтвам свойства и да създавам нови записи в таблици, когато имплементирам DAO layer.
  */
 public class EmployeeDto {
     private long id;
     @NotBlank(message = "Employee name is required")
-    @Size(min = 2, max = 60)
+    @Size(min = 2, max = 30)
     private String name;
     @Min(value = 0, message = "Age must be >= 0")
     private int age;
-    private Long companyId;
+    @Positive
+    @NotNull
+    private Long company_id;
 }

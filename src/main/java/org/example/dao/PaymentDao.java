@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.example.service.ValidationUtil;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.example.dao.DaoUtil.require;
@@ -106,4 +107,17 @@ public class PaymentDao {
             }
         }
     }
+    public static BigDecimal getTotalPaid(long apartment_id, String period) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT COALESCE(SUM(p.amount), 0.0) FROM Payment p " +
+                                    "WHERE p.apartment.id = :apt_id AND p.period = :period",
+                            BigDecimal.class
+                    )
+                    .setParameter("apt_id", apartment_id)
+                    .setParameter("period", period)
+                    .getSingleResult();
+        }
+    }
+
 }

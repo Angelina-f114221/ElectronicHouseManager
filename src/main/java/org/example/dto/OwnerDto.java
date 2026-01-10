@@ -14,7 +14,7 @@ import lombok.*;
 public class OwnerDto {
     private long id;
     @NotBlank
-    @Size(min = 2, max = 60)
+    @Size(min = 2, max = 30)
     private String name;
     @Min(0)
     private int age;

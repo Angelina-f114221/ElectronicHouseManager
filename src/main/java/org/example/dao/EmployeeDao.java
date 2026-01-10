@@ -21,8 +21,8 @@ public class EmployeeDao {
             Transaction transaction = session.beginTransaction();
             try {
                 Company company = null;
-                if (employee.getCompanyId() != null && employee.getCompanyId() > 0) {
-                    company = require(session, Company.class, employee.getCompanyId());
+                if (employee.getCompany_id() != null && employee.getCompany_id() > 0) {
+                    company = require(session, Company.class, employee.getCompany_id());
                 }
 
                 Employee employee1 = new Employee();
@@ -82,8 +82,8 @@ public class EmployeeDao {
                 Employee employee1 = require(session, Employee.class, id);
 
                 Company company = null;
-                if (employee.getCompanyId() != null && employee.getCompanyId() > 0) {
-                    company = require(session, Company.class, employee.getCompanyId());
+                if (employee.getCompany_id() != null && employee.getCompany_id() > 0) {
+                    company = require(session, Company.class, employee.getCompany_id());
                 }
 
                 employee1.setName(employee.getName());

@@ -11,6 +11,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper=true)
+@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("person")
 public abstract class Person extends BaseEntity {
     private String name;
     private int age;

@@ -22,5 +22,6 @@ public class PaymentDto {
     @Size(min = 3, max = 20)
     private String period;
     @Positive
+    @NotNull
     private long apartment_id;
 }

@@ -20,12 +20,12 @@ public class PaymentService {
     public static void pay(PayRequestDto req, String filePath) {
         ValidationUtil.validateOrThrow(req);
 
-        String companyName;
-        String employeeName;
-        String buildingName;
-        long apartmentId;
+        String company_name;
+        String employee_name;
+        String building_name;
+        long apartment_id;
         BigDecimal amount;
-        LocalDate paymentDate;
+        LocalDate payment_date;
 
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
@@ -40,22 +40,22 @@ public class PaymentService {
                 }
 
                 amount = BillingService.calculateMonthlyFeeForApartment(apartment.getId());
-                paymentDate = req.getPayment_date();
-                String period = YearMonth.from(paymentDate).toString();
+                payment_date = req.getPayment_date();
+                String period = YearMonth.from(payment_date).toString();
 
                 Payment payment = new Payment();
                 payment.setApartment(apartment);
-                payment.setPayment_date(paymentDate);
+                payment.setPayment_date(payment_date);
                 payment.setAmount(amount);
                 payment.setPeriod(period);
 
                 session.persist(payment);
                 tx.commit();
 
-                companyName = company.getName();
-                employeeName = employee.getName();
-                buildingName = building.getName();
-                apartmentId = apartment.getId();
+                company_name = company.getName();
+                employee_name = employee.getName();
+                building_name = building.getName();
+                apartment_id = apartment.getId();
 
             } catch (RuntimeException ex) {
                 tx.rollback();
@@ -65,12 +65,12 @@ public class PaymentService {
 
         PaymentExportService.appendPaymentLine(
                 filePath,
-                companyName,
-                employeeName,
-                buildingName,
-                apartmentId,
+                company_name,
+                employee_name,
+                building_name,
+                apartment_id,
                 amount,
-                paymentDate
+                payment_date
         );
     }
 }

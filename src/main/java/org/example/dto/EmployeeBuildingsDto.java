@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 
 public class EmployeeBuildingsDto {
-    private long employeeId;
-    private String employeeName;
-    private long buildingsCount;
+    private long employee_id;
+    private String employee_name;
+    private long buildings_count;
 }

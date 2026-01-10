@@ -28,7 +28,6 @@ public class ApartmentDao {
                 apartment1.setArea(apartment.getArea());
                 apartment1.setPets_using_ca(apartment.getPets_using_ca());
                 apartment1.setBuilding(building1);
-
                 session.persist(apartment1);
                 transaction.commit();
             } catch (RuntimeException exception) {

@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 
 public class BillingService {
 
-    public static BigDecimal calculateMonthlyFeeForApartment(long apartmentId) {
+    public static BigDecimal calculateMonthlyFeeForApartment(long apartment_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Apartment apartment1 = DaoUtil.require(session, Apartment.class, apartmentId);
-            long residentsCount = BillingDao.countResidentsOver7UsingElevator(session, apartmentId);
+            Apartment apartment1 = DaoUtil.require(session, Apartment.class, apartment_id);
+            long residentsCount = BillingDao.countResidentsOver7UsingElevator(session, apartment_id);
 
             BigDecimal feeArea = apartment1.getArea().multiply(apartment1.getBuilding().getFee_per_sqm());
             BigDecimal feePets = BigDecimal.valueOf(apartment1.getPets_using_ca()).multiply(apartment1.getBuilding().getFee_per_pet_using_ca());

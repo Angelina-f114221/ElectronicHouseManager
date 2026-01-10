@@ -8,48 +8,48 @@ import java.util.List;
 
 public class BillingReportService {
 
-    public static BigDecimal getDueSumForBuilding(long buildingId) {
+    public static BigDecimal getDueSumForBuilding(long building_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            var apartmentIds = session.createQuery("""
+            var apartment_ids = session.createQuery("""
                 SELECT a.id
                 FROM Apartment a
-                WHERE a.building.id = :buildingId
-            """, Long.class).setParameter("buildingId", buildingId).getResultList();
+                WHERE a.building.id = :building_id
+            """, Long.class).setParameter("building_id", building_id).getResultList();
 
             BigDecimal total = BigDecimal.ZERO;
-            for (Long id : apartmentIds) {
+            for (Long id : apartment_ids) {
                 total = total.add(BillingService.calculateMonthlyFeeForApartment(id));
             }
             return total;
         }
     }
 
-    public static BigDecimal getDueSumForCompany(long companyId) {
+    public static BigDecimal getDueSumForCompany(long company_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            var apartmentIds = session.createQuery("""
+            var apartment_ids = session.createQuery("""
                 SELECT a.id
                 FROM Apartment a
-                WHERE a.building.company.id = :companyId
-            """, Long.class).setParameter("companyId", companyId).getResultList();
+                WHERE a.building.company.id = :company_id
+            """, Long.class).setParameter("company_id", company_id).getResultList();
 
             BigDecimal total = BigDecimal.ZERO;
-            for (Long id : apartmentIds) {
+            for (Long id : apartment_ids) {
                 total = total.add(BillingService.calculateMonthlyFeeForApartment(id));
             }
             return total;
         }
     }
 
-    public static BigDecimal getDueSumForEmployee(long employeeId) {
+    public static BigDecimal getDueSumForEmployee(long employee_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            var apartmentIds = session.createQuery("""
+            var apartment_ids = session.createQuery("""
                 SELECT a.id
                 FROM Apartment a
-                WHERE a.building.employee.id = :employeeId
-            """, Long.class).setParameter("employeeId", employeeId).getResultList();
+                WHERE a.building.employee.id = :employee_id
+            """, Long.class).setParameter("employee_id", employee_id).getResultList();
 
             BigDecimal total = BigDecimal.ZERO;
-            for (Long id : apartmentIds) {
+            for (Long id : apartment_ids) {
                 total = total.add(BillingService.calculateMonthlyFeeForApartment(id));
             }
             return total;
