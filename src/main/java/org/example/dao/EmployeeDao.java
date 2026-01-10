@@ -27,7 +27,7 @@ public class EmployeeDao {
 
                 Employee employee1 = new Employee();
                 employee1.setName(employee.getName());
-                employee1.setAge(employee.getAge());
+                employee1.setBirth_date(employee.getBirth_date());
                 employee1.setCompany(company);
 
                 session.persist(employee1);
@@ -45,7 +45,7 @@ public class EmployeeDao {
                 SELECT new org.example.dto.EmployeeDto(
                     e.id,
                     e.name,
-                    e.age,
+                    e.birth_date,
                     c.id
                 )
                 FROM Employee e
@@ -60,7 +60,7 @@ public class EmployeeDao {
                 SELECT new org.example.dto.EmployeeDto(
                     e.id,
                     e.name,
-                    e.age,
+                    e.birth_date,
                     c.id
                 )
                 FROM Employee e
@@ -87,7 +87,7 @@ public class EmployeeDao {
                 }
 
                 employee1.setName(employee.getName());
-                employee1.setAge(employee.getAge());
+                employee1.setBirth_date(employee.getBirth_date());
                 employee1.setCompany(company);
 
                 transaction.commit();

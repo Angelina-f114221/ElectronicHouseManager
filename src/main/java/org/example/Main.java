@@ -268,7 +268,7 @@ public class Main {
                     OwnerDto owner = new OwnerDto(
                             0,
                             readString("Owner name: "),
-                            (int) readLong("Owner age: ")
+                            readDate("Owner date of birth: ")
                     );
                     OwnerDao.createOwner(owner);
                 }
@@ -278,14 +278,14 @@ public class Main {
 
                     System.out.println("Change:");
                     System.out.println("1 - name");
-                    System.out.println("2 - age");
+                    System.out.println("2 - date of birth");
                     String field = sc.nextLine().trim();
 
-                    OwnerDto upd = new OwnerDto(0, cur.getName(), cur.getAge());
+                    OwnerDto upd = new OwnerDto(0, cur.getName(), cur.getBirth_date());
 
                     switch (field) {
                         case "1" -> upd.setName(readString("New name: "));
-                        case "2" -> upd.setAge((int) readLong("New age: "));
+                        case "2" -> upd.setBirth_date(readDate("New date of birth: "));
                         default -> {
                             System.out.println("No such option");
                             return;
@@ -319,7 +319,7 @@ public class Main {
                     ResidentDto resident = new ResidentDto(
                             0,
                             readString("Resident name: "),
-                            (int) readLong("Resident age: "),
+                            readDate("Resident date of birth: "),
                             readBoolean("Resident uses elevator (true/false): "),
                             readDate("Resident contract_start (YYYY-MM-DD): "),
                             readLong("Resident apartment_id: ")
@@ -332,7 +332,7 @@ public class Main {
 
                     System.out.println("Change:");
                     System.out.println("1 - name");
-                    System.out.println("2 - age");
+                    System.out.println("2 - date of birth");
                     System.out.println("3 - uses_elevator");
                     System.out.println("4 - contract_start");
                     System.out.println("5 - apartment_id");
@@ -341,7 +341,7 @@ public class Main {
                     ResidentDto upd = new ResidentDto(
                             0,
                             cur.getName(),
-                            cur.getAge(),
+                            cur.getBirth_date(),
                             cur.isUses_elevator(),
                             cur.getContract_start(),
                             cur.getApartment_id()
@@ -349,7 +349,7 @@ public class Main {
 
                     switch (field) {
                         case "1" -> upd.setName(readString("New name: "));
-                        case "2" -> upd.setAge((int) readLong("New age: "));
+                        case "2" -> upd.setBirth_date(readDate("New date of birth: "));
                         case "3" -> upd.setUses_elevator(readBoolean("New uses_elevator (true/false): "));
                         case "4" -> upd.setContract_start(readDate("New contract_start (YYYY-MM-DD): "));
                         case "5" -> upd.setApartment_id(readLong("New apartment_id: "));
@@ -386,7 +386,7 @@ public class Main {
                     EmployeeDto employee = new EmployeeDto(
                             0,
                             readString("Employee name: "),
-                            (int) readLong("Employee age: "),
+                            readDate("Employee date of birth: "),
                             readOptionalLong("Employee company_id (0 for null): ")
                     );
                     EmployeeDao.createEmployee(employee);
@@ -397,20 +397,20 @@ public class Main {
 
                     System.out.println("Change:");
                     System.out.println("1 - name");
-                    System.out.println("2 - age");
+                    System.out.println("2 - date of birth");
                     System.out.println("3 - company_id");
                     String field = sc.nextLine().trim();
 
                     EmployeeDto upd = new EmployeeDto(
                             0,
                             cur.getName(),
-                            cur.getAge(),
+                            cur.getBirth_date(),
                             cur.getCompany_id()
                     );
 
                     switch (field) {
                         case "1" -> upd.setName(readString("New name: "));
-                        case "2" -> upd.setAge((int) readLong("New age: "));
+                        case "2" -> upd.setBirth_date(readDate("New date of birth: "));
                         case "3" -> {
                             System.out.println("All companies:");
                             CompanyDao.getCompanies().forEach(System.out::println);

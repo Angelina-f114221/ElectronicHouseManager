@@ -24,7 +24,7 @@ public class ResidentDao {
 
                 Resident resident1 = new Resident();
                 resident1.setName(resident.getName());
-                resident1.setAge(resident.getAge());
+                resident1.setBirth_date(resident.getBirth_date());
                 resident1.setUses_elevator(resident.isUses_elevator());
                 resident1.setContract_start(resident.getContract_start());
                 resident1.setApartment(apartment1);
@@ -44,7 +44,7 @@ public class ResidentDao {
                 SELECT new org.example.dto.ResidentDto(
                     r.id,
                     r.name,
-                    r.age,
+                    r.birth_date,
                     r.uses_elevator,
                     r.contract_start,
                     r.apartment.id
@@ -60,7 +60,7 @@ public class ResidentDao {
                 SELECT new org.example.dto.ResidentDto(
                     r.id,
                     r.name,
-                    r.age,
+                    r.birth_date,
                     r.uses_elevator,
                     r.contract_start,
                     r.apartment.id
@@ -84,7 +84,7 @@ public class ResidentDao {
                 Apartment apartment1 = require(session, Apartment.class, resident.getApartment_id());
 
                 resident1.setName(resident.getName());
-                resident1.setAge(resident.getAge());
+                resident1.setBirth_date(resident.getBirth_date());
                 resident1.setUses_elevator(resident.isUses_elevator());
                 resident1.setContract_start(resident.getContract_start());
                 resident1.setApartment(apartment1);

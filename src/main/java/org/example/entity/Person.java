@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 @Entity
 @Table(name = "persons")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -15,5 +18,10 @@ import lombok.ToString;
 @DiscriminatorValue("person")
 public abstract class Person extends BaseEntity {
     private String name;
-    private int age;
+    @Column(name = "birth_date", nullable = false)
+    private LocalDate birth_date;
+
+    public int getAge() {
+        return Period.between(birth_date, LocalDate.now()).getYears();
+    }
 }

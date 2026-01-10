@@ -2,6 +2,8 @@ package org.example.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -11,5 +13,5 @@ import lombok.*;
 public class ResidentShortDto {
     private long id;
     private String name;
-    private int age;
+    private LocalDate birth_date;
 }

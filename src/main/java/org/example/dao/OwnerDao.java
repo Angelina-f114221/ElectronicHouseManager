@@ -21,7 +21,7 @@ public class OwnerDao {
             try {
                 Owner owner1 = new Owner();
                 owner1.setName(owner.getName());
-                owner1.setAge(owner.getAge());
+                owner1.setBirth_date(owner.getBirth_date());
 
                 session.persist(owner1);
                 transaction.commit();
@@ -38,7 +38,7 @@ public class OwnerDao {
                 SELECT new org.example.dto.OwnerDto(
                     o.id,
                     o.name,
-                    o.age
+                    o.birth_date
                 )
                 FROM Owner o
             """, OwnerDto.class).getResultList();
@@ -51,7 +51,7 @@ public class OwnerDao {
                 SELECT new org.example.dto.OwnerDto(
                     o.id,
                     o.name,
-                    o.age
+                    o.birth_date
                 )
                 FROM Owner o
                 WHERE o.id = :id
@@ -71,7 +71,7 @@ public class OwnerDao {
                 Owner owner1 = require(session, Owner.class, id);
 
                 owner1.setName(owner.getName());
-                owner1.setAge(owner.getAge());
+                owner1.setBirth_date(owner.getBirth_date());
 
                 transaction.commit();
             } catch (RuntimeException exception) {

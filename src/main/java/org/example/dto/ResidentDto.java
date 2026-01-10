@@ -8,6 +8,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @AllArgsConstructor
 @Getter
@@ -19,8 +20,9 @@ public class ResidentDto {
     private long id;
     @NotBlank
     private String name;
-    @Min(0)
-    private int age;
+    @NotNull
+    @PastOrPresent
+    private LocalDate birth_date;
     @NotBlank
     private boolean uses_elevator;
     @NotNull

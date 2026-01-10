@@ -3,6 +3,8 @@ package org.example.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -16,8 +18,9 @@ public class EmployeeDto {
     @NotBlank(message = "Employee name is required")
     @Size(min = 2, max = 30)
     private String name;
-    @Min(value = 0, message = "Age must be >= 0")
-    private int age;
+    @NotNull
+    @PastOrPresent
+    private LocalDate birth_date;
     @Positive
     @NotNull
     private Long company_id;

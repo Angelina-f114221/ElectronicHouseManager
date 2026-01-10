@@ -66,7 +66,7 @@ public class FilterSortDao {
                 SELECT new org.example.dto.ResidentShortDto(
                     r.id,
                     r.name,
-                    r.age
+                    r.birth_date
                 )
                 FROM Resident r
                 ORDER BY r.name ASC
@@ -80,10 +80,10 @@ public class FilterSortDao {
                 SELECT new org.example.dto.ResidentShortDto(
                     r.id,
                     r.name,
-                    r.age
+                    r.birth_date
                 )
                 FROM Resident r
-                ORDER BY r.age DESC
+                ORDER BY r.birth_date DESC
             """, ResidentShortDto.class).getResultList();
         }
     }
