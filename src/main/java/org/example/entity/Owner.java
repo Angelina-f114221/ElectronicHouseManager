@@ -14,6 +14,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString(callSuper=true)
+@DiscriminatorValue("Owner")
 public class Owner extends Person {
     @ManyToMany
     @JoinTable(name = "owner_apartment")

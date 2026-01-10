@@ -14,6 +14,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString(callSuper=true)
+@DiscriminatorValue("Employee")
 public class Employee extends Person {
 
     @ManyToOne(fetch = FetchType.LAZY)

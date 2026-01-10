@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @ToString(callSuper=true)
+@DiscriminatorValue("Resident")
 public class Resident extends Person {
     private boolean uses_elevator;
     private LocalDate contract_start;
