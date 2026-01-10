@@ -15,14 +15,9 @@ import java.math.BigDecimal;
 
 public class ApartmentDto {
     private long id;
-    @Min(value = 1, message = "Apartment number must be >= 1")
-    private int number;
-    @Min(value = 0, message = "Floor must be >= 0")
-    private int floor;
-    @Positive(message = "Area must be > 0")
-    private BigDecimal area;
-    @PositiveOrZero(message = "Pets using common areas must be >= 0")
-    private int pets_using_ca;
-    @Positive(message = "Building id must be > 0")
-    private long building_id;
+    @Positive(message = "Apartment number must be >= 1") private int number;
+    @Positive(message = "Floor must be >= 1") private int floor;
+    @Positive(message = "Area must be > 0.0") private BigDecimal area;
+    @Min(value = 0, message = "Pets must be >= 0") private int pets_using_ca;
+    @Positive(message = "Building id must be > 0") private long building_id;
 }

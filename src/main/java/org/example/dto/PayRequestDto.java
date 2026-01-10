@@ -13,10 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 
 public class PayRequestDto {
-    @Positive
-    @NotNull
-    private long apartment_id;
-    @NotNull
-    @PastOrPresent
-    private LocalDate payment_date;
+    @Positive(message = "Apartment id must be > 0") private long apartment_id;
+    @NotNull(message = "Payment date is required") @PastOrPresent(message = "Payment date must be in the past or present") private LocalDate payment_date;
 }

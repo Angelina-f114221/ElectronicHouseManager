@@ -13,10 +13,6 @@ import java.time.LocalDate;
 
 public class OwnerDto {
     private long id;
-    @NotBlank
-    @Size(min = 2, max = 30)
-    private String name;
-    @NotNull
-    @PastOrPresent
-    private LocalDate birth_date;
+    @NotBlank(message = "Name is required") @Size(min = 2, max = 30, message = "Name must be 2-30 characters") private String name;
+    @NotNull(message = "Birth date is required") @PastOrPresent(message = "Birth date must be in the past or present") private LocalDate birth_date;
 }

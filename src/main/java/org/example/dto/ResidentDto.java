@@ -18,17 +18,9 @@ import java.time.Period;
 
 public class ResidentDto {
     private long id;
-    @NotBlank
-    private String name;
-    @NotNull
-    @PastOrPresent
-    private LocalDate birth_date;
-    @NotBlank
+    @NotBlank(message = "Name is required") private String name;
+    @NotNull(message = "Birth date is required") @PastOrPresent(message = "Birth date must be in the past or present") private LocalDate birth_date;
     private boolean uses_elevator;
-    @NotNull
-    @PastOrPresent
-    private LocalDate contract_start;
-    @Positive
-    @NotNull
-    private long apartment_id;
+    @NotNull(message = "Contract start date is required") @PastOrPresent(message = "Contract start date must be in the past or present") private LocalDate contract_start;
+    @Positive(message = "Apartment id must be > 0") private long apartment_id;
 }

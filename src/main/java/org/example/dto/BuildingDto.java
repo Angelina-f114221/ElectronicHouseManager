@@ -14,25 +14,15 @@ import java.time.LocalDate;
 
 public class BuildingDto {
     private long id;
-    @NotBlank
-    @Size(min = 2, max = 30)
-    private String name;
-    @Min(1)
-    private int floors;
-    @NotBlank
-    @Size(min = 5, max = 50)
-    private String address;
-    @PositiveOrZero private BigDecimal common_areas;
-    @PositiveOrZero private BigDecimal total_areas;
-    @PastOrPresent
-    private LocalDate contract_start_date;
-    @PositiveOrZero private BigDecimal fee_per_sqm;
-    @PositiveOrZero private BigDecimal fee_per_pet_using_ca;
-    @PositiveOrZero private BigDecimal fee_per_person_over_7_using_elevator;
-    @NotNull
-    @Positive
-    private Long company_id;
-    @NotNull
-    @Positive
-    private Long employee_id;
+    @NotBlank(message = "Building name is required") @Size(min = 2, max = 30, message =  "Building name must be 2-30 characters") private String name;
+    @Positive(message = "Floors must be > 0") private int floors;
+    @NotBlank(message = "Address is required") @Size(min = 5, max = 50, message = "Address must be 5-50 characters long") private String address;
+    @DecimalMin(value = "0.1", message = "Amount must be > 0.1") private BigDecimal common_areas;
+    @DecimalMin(value = "0.1", message = "Amount must be > 0.1") private BigDecimal total_areas;
+    @NotNull(message = "Contract date is required") @PastOrPresent(message = "Birth date must be in the present or in the past") private LocalDate contract_start_date;
+    @DecimalMin(value = "0.1", message = "Amount must be > 0.1") private BigDecimal fee_per_sqm;
+    @DecimalMin(value = "0.1", message = "Amount must be > 0.1") private BigDecimal fee_per_pet_using_ca;
+    @DecimalMin(value = "0.1", message = "Amount must be > 0.1") private BigDecimal fee_per_person_over_7_using_elevator;
+    @Positive(message = "Company id must be > 0") private Long company_id;
+    @Positive(message = "Employee id must be > 0") private Long employee_id;
 }
