@@ -32,12 +32,10 @@ public class Building extends BaseEntity {
     private Set<Apartment> apartments;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @ToString.Exclude
     @JoinColumn(name = "company_id")
     private Company company;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @ToString.Exclude
     @JoinColumn(name = "employee_id")
     private Employee employee;
 }

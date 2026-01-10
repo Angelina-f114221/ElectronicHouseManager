@@ -21,7 +21,6 @@ public class Payment extends BaseEntity {
     private String period;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @ToString.Exclude
     // без апартамент не може да има плащане
     @JoinColumn(name = "apartment_id", nullable = false)
     private Apartment apartment;

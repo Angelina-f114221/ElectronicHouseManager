@@ -21,6 +21,5 @@ public class Resident extends Person {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "apartment_id", nullable = false)
-    @ToString.Exclude
     private Apartment apartment;
 }
