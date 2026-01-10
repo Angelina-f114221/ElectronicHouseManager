@@ -17,10 +17,10 @@ import java.util.Set;
 @DiscriminatorValue("Employee")
 public class Employee extends Person {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToMany
+    @JoinTable(name = "employee_company")
     @ToString.Exclude
-    @JoinColumn(name = "company_id")
-    private Company company;
+    private Set<Company> companies;
 
     @OneToMany(mappedBy = "employee")
     @ToString.Exclude

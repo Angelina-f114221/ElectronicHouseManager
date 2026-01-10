@@ -9,7 +9,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.example.service.ValidationUtil;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.example.dao.DaoUtil.require;
 
@@ -20,15 +22,18 @@ public class EmployeeDao {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
-                Company company = null;
-                if (employee.getCompany_id() != null && employee.getCompany_id() > 0) {
-                    company = require(session, Company.class, employee.getCompany_id());
+                Set<Company> companies = new HashSet<>();
+                if (employee.getCompany_ids() != null && !employee.getCompany_ids().isEmpty()) {
+                    for (Long companyId : employee.getCompany_ids()) {
+                        Company company = require(session, Company.class, companyId);
+                        companies.add(company);
+                    }
                 }
 
                 Employee employee1 = new Employee();
                 employee1.setName(employee.getName());
                 employee1.setBirth_date(employee.getBirth_date());
-                employee1.setCompany(company);
+                employee1.setCompanies(companies);
 
                 session.persist(employee1);
                 transaction.commit();
@@ -41,36 +46,42 @@ public class EmployeeDao {
 
     public static List<EmployeeDto> getEmployees() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("""
-                SELECT new org.example.dto.EmployeeDto(
-                    e.id,
-                    e.name,
-                    e.birth_date,
-                    c.id
-                )
-                FROM Employee e
-                LEFT JOIN e.company c
-            """, EmployeeDto.class).getResultList();
+            List<Employee> employees = session.createQuery(
+                    """
+                    FROM Employee e
+                    LEFT JOIN FETCH e.companies
+                    """, Employee.class).getResultList();
+
+            return employees.stream()
+                    .map(e -> new EmployeeDto(
+                            e.getId(),
+                            e.getName(),
+                            e.getBirth_date(),
+                            e.getCompanies().stream().map(Company::getId).collect(java.util.stream.Collectors.toSet())
+                    ))
+                    .toList();
         }
     }
 
     public static EmployeeDto getEmployee(long id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("""
-                SELECT new org.example.dto.EmployeeDto(
-                    e.id,
-                    e.name,
-                    e.birth_date,
-                    c.id
-                )
-                FROM Employee e
-                LEFT JOIN e.company c
-                WHERE e.id = :id
-            """, EmployeeDto.class)
+            Employee employee = session.createQuery(
+                            """
+                            FROM Employee e
+                            LEFT JOIN FETCH e.companies
+                            WHERE e.id = :id
+                            """, Employee.class)
                     .setParameter("id", id)
                     .getResultStream()
                     .findFirst()
                     .orElseThrow(() -> new EntityNotFoundException("Employee with id=" + id + " not found"));
+
+            return new EmployeeDto(
+                    employee.getId(),
+                    employee.getName(),
+                    employee.getBirth_date(),
+                    employee.getCompanies().stream().map(Company::getId).collect(java.util.stream.Collectors.toSet())
+            );
         }
     }
 
@@ -81,14 +92,17 @@ public class EmployeeDao {
             try {
                 Employee employee1 = require(session, Employee.class, id);
 
-                Company company = null;
-                if (employee.getCompany_id() != null && employee.getCompany_id() > 0) {
-                    company = require(session, Company.class, employee.getCompany_id());
+                Set<Company> companies = new HashSet<>();
+                if (employee.getCompany_ids() != null && !employee.getCompany_ids().isEmpty()) {
+                    for (Long companyId : employee.getCompany_ids()) {
+                        Company company = require(session, Company.class, companyId);
+                        companies.add(company);
+                    }
                 }
 
                 employee1.setName(employee.getName());
                 employee1.setBirth_date(employee.getBirth_date());
-                employee1.setCompany(company);
+                employee1.setCompanies(companies);
 
                 transaction.commit();
             } catch (RuntimeException exception) {
