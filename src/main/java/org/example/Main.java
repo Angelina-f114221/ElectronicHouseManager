@@ -7,18 +7,9 @@ import org.example.service.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Scanner;
-
-// 1.company
-// 2. employee
-// 3. building
-// 4. apartment
-/* week 6, 35:00
-Enum options are
-payment status: PENDING, PAID, OVERDUE, CANCELLED
-contract status: ACTIVE, TERMINATED, EXPIRED
-type of fee: BASE_AREA_FEE, PER_PERSON_FEE, PET_FEE
- */
+import java.util.Set;
 
 public class Main {
     private static final Scanner sc = new Scanner(System.in);
@@ -56,7 +47,6 @@ public class Main {
     }
 
     private static void printMenu() {
-
         System.out.println("0 - Company");
         System.out.println("1 - Employee");
         System.out.println("2 - Building");
@@ -95,9 +85,7 @@ public class Main {
                     long id = readLong("Company id: ");
                     CompanyDao.deleteCompany(id);
                 }
-                default -> {
-                    System.out.println("No such option");
-                }
+                default -> System.out.println("No such option");
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
@@ -121,59 +109,58 @@ public class Main {
                 }
                 case "2" -> {
                     long id = readLong("Building id: ");
-                        BuildingDto cur = BuildingDao.getBuilding(id);
+                    BuildingDto cur = BuildingDao.getBuilding(id);
 
-                        System.out.println("Change:");
-                        System.out.println("1 - name");
-                        System.out.println("2 - floors");
-                        System.out.println("3 - address");
-                        System.out.println("4 - common_areas");
-                        System.out.println("5 - total_areas");
-                        System.out.println("6 - contract_start_date");
-                        System.out.println("7 - fee_per_sqm");
-                        System.out.println("8 - fee_per_pet_using_ca");
-                        System.out.println("9 - fee_per_person_over_7_using_elevator");
-                        System.out.println("10 - company_id");
-                        System.out.println("11 - employee_id");
-                        String field = sc.nextLine().trim();
+                    System.out.println("Change:");
+                    System.out.println("1 - name");
+                    System.out.println("2 - floors");
+                    System.out.println("3 - address");
+                    System.out.println("4 - common_areas");
+                    System.out.println("5 - total_areas");
+                    System.out.println("6 - contract_start_date");
+                    System.out.println("7 - fee_per_sqm");
+                    System.out.println("8 - fee_per_pet_using_ca");
+                    System.out.println("9 - fee_per_person_over_7_using_elevator");
+                    System.out.println("10 - company_id");
+                    System.out.println("11 - employee_id");
+                    String field = sc.nextLine().trim();
 
-                        BuildingDto upd = new BuildingDto(
-                                0,
-                                cur.getName(),
-                                cur.getFloors(),
-                                cur.getAddress(),
-                                cur.getCommon_areas(),
-                                cur.getTotal_areas(),
-                                cur.getContract_start_date(),
-                                cur.getFee_per_sqm(),
-                                cur.getFee_per_pet_using_ca(),
-                                cur.getFee_per_person_over_7_using_elevator(),
-                                cur.getCompany_id(),
-                                cur.getEmployee_id()
-                        );
+                    BuildingDto upd = new BuildingDto(
+                            0,
+                            cur.getName(),
+                            cur.getFloors(),
+                            cur.getAddress(),
+                            cur.getCommon_areas(),
+                            cur.getTotal_areas(),
+                            cur.getContract_start_date(),
+                            cur.getFee_per_sqm(),
+                            cur.getFee_per_pet_using_ca(),
+                            cur.getFee_per_person_over_7_using_elevator(),
+                            cur.getCompany_id(),
+                            cur.getEmployee_id()
+                    );
 
-                        switch (field) {
-                            case "1" -> upd.setName(readString("New name: "));
-                            case "2" -> upd.setFloors((int) readLong("New floors: "));
-                            case "3" -> upd.setAddress(readString("New address: "));
-                            case "4" -> upd.setCommon_areas(BigDecimal.valueOf(readBigDecimal("New common_areas: ").doubleValue()));
-                            case "5" -> upd.setTotal_areas(BigDecimal.valueOf(readBigDecimal("New total_areas: ").doubleValue()));
-                            case "6" -> upd.setContract_start_date(readDate("New contract_start_date (YYYY-MM-DD): "));
-                            case "7" -> upd.setFee_per_sqm(BigDecimal.valueOf(readBigDecimal("New fee_per_sqm: ").doubleValue()));
-                            case "8" -> upd.setFee_per_pet_using_ca(BigDecimal.valueOf(readBigDecimal("New fee_per_pet_using_ca: ").doubleValue()));
-                            case "9" -> upd.setFee_per_person_over_7_using_elevator(BigDecimal.valueOf(readBigDecimal("New fee_per_person_over_7_using_elevator: ").doubleValue()));
-                            case "10" -> upd.setCompany_id(readOptionalLong("New company_id (0 for null): "));
-                            case "11" -> upd.setEmployee_id(readOptionalLong("New employee_id: "));
-                            default -> {
-                                System.out.println("No such option");
-                                return;
-                            }
+                    switch (field) {
+                        case "1" -> upd.setName(readString("New name: "));
+                        case "2" -> upd.setFloors((int) readLong("New floors: "));
+                        case "3" -> upd.setAddress(readString("New address: "));
+                        case "4" -> upd.setCommon_areas(BigDecimal.valueOf(readBigDecimal("New common_areas: ").doubleValue()));
+                        case "5" -> upd.setTotal_areas(BigDecimal.valueOf(readBigDecimal("New total_areas: ").doubleValue()));
+                        case "6" -> upd.setContract_start_date(readDate("New contract_start_date (YYYY-MM-DD): "));
+                        case "7" -> upd.setFee_per_sqm(BigDecimal.valueOf(readBigDecimal("New fee_per_sqm: ").doubleValue()));
+                        case "8" -> upd.setFee_per_pet_using_ca(BigDecimal.valueOf(readBigDecimal("New fee_per_pet_using_ca: ").doubleValue()));
+                        case "9" -> upd.setFee_per_person_over_7_using_elevator(BigDecimal.valueOf(readBigDecimal("New fee_per_person_over_7_using_elevator: ").doubleValue()));
+                        case "10" -> upd.setCompany_id(readOptionalLong("New company_id (0 for null): "));
+                        case "11" -> upd.setEmployee_id(readOptionalLong("New employee_id: "));
+                        default -> {
+                            System.out.println("No such option");
+                            return;
                         }
-
-                        BuildingDao.updateBuilding(id, upd);
-                        System.out.println("Updated: " + BuildingDao.getBuilding(id));
                     }
 
+                    BuildingDao.updateBuilding(id, upd);
+                    System.out.println("Updated: " + BuildingDao.getBuilding(id));
+                }
 
                 case "3" -> {
                     long id = readLong("Building id: ");
@@ -383,11 +370,24 @@ public class Main {
         try {
             switch (cmd) {
                 case "1" -> {
+                    System.out.println("All companies:");
+                    CompanyDao.getCompanies().forEach(System.out::println);
+
+                    Set<Long> companyIds = new HashSet<>();
+                    String addMore = "yes";
+                    while ("yes".equalsIgnoreCase(addMore)) {
+                        long companyId = readLong("Employee company_id (0 for skip): ");
+                        if (companyId > 0) {
+                            companyIds.add(companyId);
+                        }
+                        addMore = readString("Add another company? (yes/no): ");
+                    }
+
                     EmployeeDto employee = new EmployeeDto(
                             0,
                             readString("Employee name: "),
                             readDate("Employee date of birth: "),
-                            readOptionalLong("Employee company_id (0 for null): ")
+                            companyIds
                     );
                     EmployeeDao.createEmployee(employee);
                 }
@@ -398,14 +398,14 @@ public class Main {
                     System.out.println("Change:");
                     System.out.println("1 - name");
                     System.out.println("2 - date of birth");
-                    System.out.println("3 - company_id");
+                    System.out.println("3 - company_ids");
                     String field = sc.nextLine().trim();
 
                     EmployeeDto upd = new EmployeeDto(
                             0,
                             cur.getName(),
                             cur.getBirth_date(),
-                            cur.getCompany_id()
+                            new HashSet<>(cur.getCompany_ids())
                     );
 
                     switch (field) {
@@ -414,7 +414,17 @@ public class Main {
                         case "3" -> {
                             System.out.println("All companies:");
                             CompanyDao.getCompanies().forEach(System.out::println);
-                            upd.setCompany_id(readOptionalLong("New company_id (0 for null): "));
+
+                            Set<Long> newCompanyIds = new HashSet<>();
+                            String addMore = "yes";
+                            while ("yes".equalsIgnoreCase(addMore)) {
+                                long companyId = readLong("Company id (0 for skip): ");
+                                if (companyId > 0) {
+                                    newCompanyIds.add(companyId);
+                                }
+                                addMore = readString("Add another company? (yes/no): ");
+                            }
+                            upd.setCompany_ids(newCompanyIds);
                         }
                         default -> {
                             System.out.println("No such option");
@@ -592,7 +602,7 @@ public class Main {
 
     private static void PaymentStatus() {
         long apartmentId = readLong("Apartment id: ");
-        String month = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));  // "2026-01"
+        String month = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
 
         BigDecimal due = BillingService.calculateMonthlyFeeForApartment(apartmentId);
 
@@ -602,7 +612,6 @@ public class Main {
         System.out.printf("Apartment %d for %s: Due=%.2f, Paid=%.2f, %s%n",
                 apartmentId, month, due, paid, isPaid ? "PAID" : "PENDING");
     }
-
 
     private static String readString(String prompt) {
         System.out.print(prompt);
