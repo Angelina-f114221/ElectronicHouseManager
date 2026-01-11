@@ -23,9 +23,6 @@ public class Building extends BaseEntity {
     private BigDecimal common_areas;
     private BigDecimal total_areas;
     private LocalDate contract_start_date;
-    private BigDecimal fee_per_sqm;
-    private BigDecimal fee_per_pet_using_ca;
-    private BigDecimal fee_per_person_over_7_using_elevator;
 
     @OneToMany(mappedBy = "building")
     @ToString.Exclude
@@ -38,4 +35,7 @@ public class Building extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
+
+    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Fee> fees;
 }

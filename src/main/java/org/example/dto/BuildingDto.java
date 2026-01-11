@@ -20,9 +20,6 @@ public class BuildingDto {
     @DecimalMin(value = "0.1", message = "Amount must be > 0.1") private BigDecimal common_areas;
     @DecimalMin(value = "0.1", message = "Amount must be > 0.1") private BigDecimal total_areas;
     @NotNull(message = "Contract date is required") @PastOrPresent(message = "Birth date must be in the present or in the past") private LocalDate contract_start_date;
-    @DecimalMin(value = "0.1", message = "Amount must be > 0.1") private BigDecimal fee_per_sqm;
-    @DecimalMin(value = "0.1", message = "Amount must be > 0.1") private BigDecimal fee_per_pet_using_ca;
-    @DecimalMin(value = "0.1", message = "Amount must be > 0.1") private BigDecimal fee_per_person_over_7_using_elevator;
     @Positive(message = "Company id must be > 0") private Long company_id;
     @Positive(message = "Employee id must be > 0") private Long employee_id;
 }

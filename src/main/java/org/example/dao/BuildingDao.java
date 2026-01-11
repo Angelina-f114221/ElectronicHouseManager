@@ -35,9 +35,6 @@ public class BuildingDao {
                 building1.setCommon_areas(building.getCommon_areas());
                 building1.setTotal_areas(building.getTotal_areas());
                 building1.setContract_start_date(building.getContract_start_date());
-                building1.setFee_per_sqm(building.getFee_per_sqm());
-                building1.setFee_per_pet_using_ca(building.getFee_per_pet_using_ca());
-                building1.setFee_per_person_over_7_using_elevator(building.getFee_per_person_over_7_using_elevator());
 
                 building1.setCompany(company);
                 building1.setEmployee(employee);
@@ -62,9 +59,6 @@ public class BuildingDao {
                     b.common_areas,
                     b.total_areas,
                     b.contract_start_date,
-                    b.fee_per_sqm,
-                    b.fee_per_pet_using_ca,
-                    b.fee_per_person_over_7_using_elevator,
                     c.id,
                     e.id
                 )
@@ -86,9 +80,6 @@ public class BuildingDao {
                     b.common_areas,
                     b.total_areas,
                     b.contract_start_date,
-                    b.fee_per_sqm,
-                    b.fee_per_pet_using_ca,
-                    b.fee_per_person_over_7_using_elevator,
                     c.id,
                     e.id
                 )
@@ -124,9 +115,6 @@ public class BuildingDao {
                 building1.setCommon_areas(building.getCommon_areas());
                 building1.setTotal_areas(building.getTotal_areas());
                 building1.setContract_start_date(building.getContract_start_date());
-                building1.setFee_per_sqm(building.getFee_per_sqm());
-                building1.setFee_per_pet_using_ca(building.getFee_per_pet_using_ca());
-                building1.setFee_per_person_over_7_using_elevator(building.getFee_per_person_over_7_using_elevator());
 
                 building1.setCompany(company);
                 building1.setEmployee(employee);
@@ -152,4 +140,4 @@ public class BuildingDao {
             }
         }
     }
-}
+    }

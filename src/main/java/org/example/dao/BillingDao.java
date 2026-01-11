@@ -1,23 +1,38 @@
 package org.example.dao;
 
-import org.example.entity.Resident;
+import org.example.entity.Fee;
 import org.hibernate.Session;
 
 public class BillingDao {
 
+    /**
+     * Count residents over 7 years old using elevator in an apartment
+     */
     public static long countResidentsOver7UsingElevator(Session session, long apartment_id) {
-        if (apartment_id <= 0) {
-            throw new IllegalArgumentException("apartmentId must be > 0");
-        }
-
         return session.createQuery("""
-            SELECT r FROM Resident r
-            WHERE r.apartment.id = :apartment_id
-              AND r.uses_elevator = true
-        """, Resident.class)
-                .setParameter("apartment_id", apartment_id)
+                SELECT COUNT(r) 
+                FROM Resident r 
+                WHERE r.apartment.id = :apartmentId 
+                AND r.uses_elevator = true
+                AND YEAR(CURRENT_DATE) - YEAR(r.birth_date) > 7
+            """, Long.class)
+                .setParameter("apartmentId", apartment_id)
+                .getSingleResult();
+    }
+
+    /**
+     * Get the latest (most recent) fee for a building
+     */
+    public static Fee getLatestFeeForBuilding(Session session, long building_id) {
+        return session.createQuery("""
+                SELECT f FROM Fee f 
+                WHERE f.building.id = :buildingId 
+                ORDER BY f.start_date DESC
+            """, Fee.class)
+                .setParameter("buildingId", building_id)
+                .setMaxResults(1)
                 .getResultStream()
-                .filter(r -> r.getAge() > 7)
-                .count();
+                .findFirst()
+                .orElse(null);
     }
 }

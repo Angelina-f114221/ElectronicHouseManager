@@ -1,13 +1,16 @@
 package org.example;
 
+import org.example.configuration.SessionFactoryUtil;
 import org.example.dao.*;
 import org.example.dto.*;
+import org.example.entity.*;
 import org.example.service.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -22,20 +25,20 @@ public class Main {
 
             try {
                 switch (cmd) {
-                    case "0" -> CompanyCrud();
-                    case "1" -> EmployeesCrud();
-                    case "2" -> BuildingCrud();
-                    case "3" -> ApartmentCrud();
-                    case "4" -> OwnerCrud();
-                    case "5" -> ResidentCrud();
-                    case "6" -> Assignments();
-                    case "7" -> setFees();
-                    case "8" -> createPayment();
-                    case "9" -> FilterSort();
-                    case "10" -> Reports();
-                    case "11" -> PaymentExport();
-                    case "12" -> PaymentStatus();
-                    case "13" -> { return; }
+                    case "1" -> CompanyCrud();
+                    case "2" -> EmployeesCrud();
+                    case "3" -> BuildingCrud();
+                    case "4" -> ApartmentCrud();
+                    case "5" -> OwnerCrud();
+                    case "6" -> ResidentCrud();
+                    case "7" -> Assignments();
+                    case "8" -> ManageFees();
+                    case "9" -> createPayment();
+                    case "10" -> FilterSort();
+                    case "11" -> Reports();
+                    case "12" -> PaymentExport();
+                    case "13" -> PaymentStatus();
+                    case "14" -> { return; }
                     default -> System.out.println("Unknown command.");
                 }
             } catch (Exception ex) {
@@ -47,20 +50,20 @@ public class Main {
     }
 
     private static void printMenu() {
-        System.out.println("0 - Company");
-        System.out.println("1 - Employee");
-        System.out.println("2 - Building");
-        System.out.println("3 - Apartment");
-        System.out.println("4 - Owner");
-        System.out.println("5 - Resident");
-        System.out.println("6 - Building assignment rules");
-        System.out.println("7 - Set fees for building");
-        System.out.println("8 - Pay fees");
-        System.out.println("9 - Filter and sort");
-        System.out.println("10 - Reports (counts/lists/sums)");
-        System.out.println("11 - Export payment line to file");
-        System.out.println("12 - Check payment status");
-        System.out.println("13 - Exit");
+        System.out.println("1 - Company");
+        System.out.println("2 - Employee");
+        System.out.println("3 - Building");
+        System.out.println("4 - Apartment");
+        System.out.println("5 - Owner");
+        System.out.println("6 - Resident");
+        System.out.println("7 - Building assignment rules");
+        System.out.println("8 - Manage fees for building");
+        System.out.println("9 - Pay fees");
+        System.out.println("10 - Filter and sort");
+        System.out.println("11 - Reports (counts/lists/sums)");
+        System.out.println("12 - Export payment line to file");
+        System.out.println("13 - Check payment status");
+        System.out.println("14 - Exit");
         System.out.println();
     }
 
@@ -118,11 +121,8 @@ public class Main {
                     System.out.println("4 - common_areas");
                     System.out.println("5 - total_areas");
                     System.out.println("6 - contract_start_date");
-                    System.out.println("7 - fee_per_sqm");
-                    System.out.println("8 - fee_per_pet_using_ca");
-                    System.out.println("9 - fee_per_person_over_7_using_elevator");
-                    System.out.println("10 - company_id");
-                    System.out.println("11 - employee_id");
+                    System.out.println("7 - company_id");
+                    System.out.println("8 - employee_id");
                     String field = sc.nextLine().trim();
 
                     BuildingDto upd = new BuildingDto(
@@ -133,9 +133,6 @@ public class Main {
                             cur.getCommon_areas(),
                             cur.getTotal_areas(),
                             cur.getContract_start_date(),
-                            cur.getFee_per_sqm(),
-                            cur.getFee_per_pet_using_ca(),
-                            cur.getFee_per_person_over_7_using_elevator(),
                             cur.getCompany_id(),
                             cur.getEmployee_id()
                     );
@@ -147,11 +144,8 @@ public class Main {
                         case "4" -> upd.setCommon_areas(BigDecimal.valueOf(readBigDecimal("New common_areas: ").doubleValue()));
                         case "5" -> upd.setTotal_areas(BigDecimal.valueOf(readBigDecimal("New total_areas: ").doubleValue()));
                         case "6" -> upd.setContract_start_date(readDate("New contract_start_date (YYYY-MM-DD): "));
-                        case "7" -> upd.setFee_per_sqm(BigDecimal.valueOf(readBigDecimal("New fee_per_sqm: ").doubleValue()));
-                        case "8" -> upd.setFee_per_pet_using_ca(BigDecimal.valueOf(readBigDecimal("New fee_per_pet_using_ca: ").doubleValue()));
-                        case "9" -> upd.setFee_per_person_over_7_using_elevator(BigDecimal.valueOf(readBigDecimal("New fee_per_person_over_7_using_elevator: ").doubleValue()));
-                        case "10" -> upd.setCompany_id(readOptionalLong("New company_id (0 for null): "));
-                        case "11" -> upd.setEmployee_id(readOptionalLong("New employee_id: "));
+                        case "7" -> upd.setCompany_id(readOptionalLong("New company_id (0 for null): "));
+                        case "8" -> upd.setEmployee_id(readOptionalLong("New employee_id: "));
                         default -> {
                             System.out.println("No such option");
                             return;
@@ -472,32 +466,59 @@ public class Main {
         }
     }
 
-    private static void setFees() {
-        System.out.println("Set fee for building");
-        long buildingId = readLong("Building id: ");
-        BuildingDto b = BuildingDao.getBuilding(buildingId);
+    private static void ManageFees() {
+        System.out.println("Manage Fees");
+        System.out.println("1 - Add new fee");
+        System.out.println("2 - View fee history for building");
+        System.out.println("3 - Delete fee");
+        String cmd = sc.nextLine().trim();
 
-        BigDecimal feeSqm = readBigDecimal("fee_per_sqm: ");
-        BigDecimal feePet = readBigDecimal("fee_per_pet_using_ca: ");
-        BigDecimal feeElev = readBigDecimal("fee_per_person_over_7_using_elevator: ");
+        try {
+            switch (cmd) {
+                case "1" -> {
+                    long buildingId = readLong("Building id: ");
 
-        BuildingDto updated = new BuildingDto(
-                0,
-                b.getName(),
-                b.getFloors(),
-                b.getAddress(),
-                b.getCommon_areas(),
-                b.getTotal_areas(),
-                b.getContract_start_date(),
-                feeSqm,
-                feePet,
-                feeElev,
-                b.getCompany_id(),
-                b.getEmployee_id()
-        );
+                    Building building = null;
+                    try (var session = SessionFactoryUtil.getSessionFactory().openSession()) {
+                        building = session.find(Building.class, buildingId);
+                    }
 
-        BuildingDao.updateBuilding(buildingId, updated);
-        System.out.println(BuildingDao.getBuilding(buildingId));
+                    if (building == null) {
+                        System.out.println("ERROR: Building not found");
+                        return;
+                    }
+
+                    BigDecimal feeSqm = readBigDecimal("fee_per_sqm: ");
+                    BigDecimal feePet = readBigDecimal("fee_per_pet_using_ca: ");
+                    BigDecimal feeElev = readBigDecimal("fee_per_person_over_7_using_elevator: ");
+
+                    Fee fee = new Fee(feeSqm, feePet, feeElev, LocalDate.now(), building);
+                    FeeDao.createFee(fee);
+                }
+
+                case "2" -> {
+                    long buildingId = readLong("Building id: ");
+                    List<Fee> fees = FeeDao.getFeesForBuilding(buildingId);
+
+                    if (fees.isEmpty()) {
+                        System.out.println("No fees found for this building");
+                    } else {
+                        System.out.println("Fee history:");
+                        fees.forEach(System.out::println);
+                    }
+                }
+
+                case "3" -> {
+                    long feeId = readLong("Fee id: ");
+                    FeeDao.deleteFee(feeId);
+                    System.out.println("✓ Fee deleted successfully!");
+                }
+
+                default -> System.out.println("No such option");
+            }
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
     }
 
     private static void createPayment() {
@@ -509,9 +530,9 @@ public class Main {
         PayRequestDto req = new PayRequestDto(apartmentId, paymentDate);
         PaymentService.pay(req, PAYMENTS_FILE);
 
+        System.out.println("✓ Payment created successfully!");
         PaymentDao.getPayments().forEach(System.out::println);
     }
-
 
     private static void FilterSort() {
         System.out.println("Companies by income (descending):");
@@ -651,9 +672,6 @@ public class Main {
         BigDecimal commonAreas = readBigDecimal("common_areas: ");
         BigDecimal totalAreas = readBigDecimal("total_areas: ");
         LocalDate contractStart = readDate("contract_start_date (YYYY-MM-DD): ");
-        BigDecimal feeSqm = readBigDecimal("fee_per_sqm: ");
-        BigDecimal feePet = readBigDecimal("fee_per_pet_using_ca: ");
-        BigDecimal feeElev = readBigDecimal("fee_per_person_over_7_using_elevator: ");
 
         Long companyId = readOptionalLong("company_id (0 for null): ");
         Long employeeId = readOptionalLong("employee_id (0 for null): ");
@@ -666,9 +684,6 @@ public class Main {
                 commonAreas,
                 totalAreas,
                 contractStart,
-                feeSqm,
-                feePet,
-                feeElev,
                 companyId,
                 employeeId
         );

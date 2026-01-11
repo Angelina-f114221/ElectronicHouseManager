@@ -9,12 +9,12 @@ import java.util.List;
 public class PaymentStatusDao {
     public static void createPaymentStatus(PaymentStatus status) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
             try {
                 session.persist(status);
-                tx.commit();
+                transaction.commit();
             } catch (RuntimeException ex) {
-                tx.rollback();
+                transaction.rollback();
                 throw ex;
             }
         }
