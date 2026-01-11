@@ -1,6 +1,7 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,10 +17,10 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString(callSuper=true)
 public class Apartment extends BaseEntity {
-    private int floor;
-    private int number;
-    private BigDecimal area;
-    private int pets_using_ca;
+    @Positive(message = "Apartment number must be >= 1") private int number;
+    @Positive(message = "Floor must be >= 1") private int floor;
+    @Positive(message = "Area must be > 0.0") private BigDecimal area;
+    @Min(value = 0, message = "Pets must be >= 0") private int pets_using_ca;
 
     @ManyToMany(mappedBy = "apartments")
     // избягва се безкрайна рекурсия на извикване на тостринг-ове
@@ -32,6 +33,7 @@ public class Apartment extends BaseEntity {
 
     // данните за сградата се зареждат само ако пожелаем, но не и по подразбиране
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @NotNull
     @JoinColumn(name = "building_id", nullable = false)
     private Building building;
 

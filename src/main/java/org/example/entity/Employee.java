@@ -1,11 +1,13 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -16,9 +18,9 @@ import java.util.Set;
 @ToString(callSuper=true)
 @DiscriminatorValue("Employee")
 public class Employee extends Person {
-
     @ManyToMany
     @JoinTable(name = "employee_company")
+    @NotEmpty(message = "Employee must have at least one company")
     @ToString.Exclude
     private Set<Company> companies;
 

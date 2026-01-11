@@ -1,6 +1,8 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +23,7 @@ import java.util.Set;
 public class Company extends BaseEntity {
     // анотирам ID-то, което също е от Jakarta
     // При генериране на записи, id-тата на една таблица са независими от тези на друга. позволява ни да имаме auto increment при code first подхода.
-   private String name;
+    @NotBlank(message = "Company name is required") @Size(min = 2, max = 30, message = "Company name must be 2-30 characters") private String name;
 
    @OneToMany(mappedBy = "company")
    @ToString.Exclude
