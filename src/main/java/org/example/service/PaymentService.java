@@ -2,12 +2,14 @@ package org.example.service;
 
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dao.DaoUtil;
+import org.example.dao.PaymentStatusDao;
 import org.example.dto.PayRequestDto;
 import org.example.entity.Apartment;
 import org.example.entity.Building;
 import org.example.entity.Company;
 import org.example.entity.Employee;
 import org.example.entity.Payment;
+import org.example.entity.PaymentStatus;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -43,11 +45,17 @@ public class PaymentService {
                 payment_date = req.getPayment_date();
                 String period = YearMonth.from(payment_date).toString();
 
+                PaymentStatus paidStatus = PaymentStatusDao.getByCode("PAID");
+                if (paidStatus == null) {
+                    throw new IllegalStateException("PaymentStatus 'PAID' not found. Initialize payment_statuses table.");
+                }
+
                 Payment payment = new Payment();
                 payment.setApartment(apartment);
                 payment.setPayment_date(payment_date);
                 payment.setAmount(amount);
                 payment.setPeriod(period);
+                payment.setStatus(paidStatus);
 
                 session.persist(payment);
                 tx.commit();

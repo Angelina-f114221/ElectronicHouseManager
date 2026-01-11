@@ -24,6 +24,10 @@ public class Payment extends BaseEntity {
     // без апартамент не може да има плащане
     @JoinColumn(name = "apartment_id", nullable = false)
     private Apartment apartment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id")
+    private PaymentStatus status;
 }
 
 

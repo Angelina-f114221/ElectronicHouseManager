@@ -501,16 +501,17 @@ public class Main {
     }
 
     private static void createPayment() {
-        System.out.println("Create Payment)");
+        System.out.println("Create Payment");
 
         long apartmentId = readLong("apartment_id: ");
-        LocalDate paymentDate = readDate("payment_date (YYYY-MM-DD): ");
+        LocalDate paymentDate = LocalDate.now();
 
         PayRequestDto req = new PayRequestDto(apartmentId, paymentDate);
         PaymentService.pay(req, PAYMENTS_FILE);
 
         PaymentDao.getPayments().forEach(System.out::println);
     }
+
 
     private static void FilterSort() {
         System.out.println("Companies by income (descending):");

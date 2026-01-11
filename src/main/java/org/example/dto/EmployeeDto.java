@@ -18,5 +18,5 @@ public class EmployeeDto {
     private long id;
     @NotBlank(message = "Employee name is required") @Size(min = 2, max = 30, message = "Employee name must be 2-30 characters") private String name;
     @NotNull(message = "Birth date is required") @PastOrPresent(message = "Birth date must be in the past or present") private LocalDate birth_date;
-    @Positive(message = "Company id must be > 0") private Set<Long> company_ids;
+    @NotEmpty(message = "Employee must have at least one company") private Set<Long> company_ids;
 }
