@@ -8,9 +8,7 @@ import org.example.entity.Building;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.example.service.ValidationUtil;
-
 import java.util.List;
-
 import static org.example.dao.DaoUtil.require;
 
 public class ApartmentDao {

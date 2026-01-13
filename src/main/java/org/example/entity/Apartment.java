@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -32,6 +31,7 @@ public class Apartment extends BaseEntity {
     private Set<Resident> residents;
 
     // данните за сградата се зареждат само ако пожелаем, но не и по подразбиране
+    // @NotNull	- Java, optional = false - Hibernate (апартаментът трябва да има сграда), nullable = false - БД
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @NotNull
     @JoinColumn(name = "building_id", nullable = false)

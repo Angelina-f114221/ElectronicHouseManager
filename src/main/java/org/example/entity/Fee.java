@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -14,7 +13,6 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "building")
 public class Fee extends BaseEntity {
 
     @NotNull(message = "Fee per sqm is required") @Positive(message = "Fee per sqm must be > 0") private BigDecimal fee_per_sqm;
@@ -23,8 +21,7 @@ public class Fee extends BaseEntity {
     @NotNull(message = "Start date is required") private LocalDate start_date;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @Positive(message = "Building id must be > 0")
+    @ToString.Exclude()
     @JoinColumn(name = "building_id", nullable = false)
     private Building building;
-
 }

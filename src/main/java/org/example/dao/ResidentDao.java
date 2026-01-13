@@ -8,18 +8,18 @@ import org.example.entity.Resident;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.example.service.ValidationUtil;
-
 import java.util.List;
-
 import static org.example.dao.DaoUtil.require;
 
 public class ResidentDao {
 
     public static void createResident(ResidentDto resident) {
+        // проверява дали всичко е наред с анотациите
         ValidationUtil.validateOrThrow(resident);
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
+                // проверка дали апартамента съществува
                 Apartment apartment1 = require(session, Apartment.class, resident.getApartment_id());
 
                 Resident resident1 = new Resident();
@@ -28,10 +28,12 @@ public class ResidentDao {
                 resident1.setUses_elevator(resident.isUses_elevator());
                 resident1.setContract_start(resident.getContract_start());
                 resident1.setApartment(apartment1);
-
+                // маркирам за инсърт, подготвям и все още не пращам
                 session.persist(resident1);
+                // изпраща всички операции в базата данни
                 transaction.commit();
             } catch (RuntimeException exception) {
+                // връща базата към старото състояние
                 transaction.rollback();
                 throw exception;
             }
@@ -68,8 +70,11 @@ public class ResidentDao {
                 FROM Resident r
                 WHERE r.id = :id
             """, ResidentDto.class)
+                    // предпазва от sql injection, понеже е вмъкната стойност
                     .setParameter("id", id)
+                    // резултатите като поток, множество редове
                     .getResultStream()
+                    // взема само първия елемент, защото ключовете са уникални
                     .findFirst()
                     .orElseThrow(() -> new EntityNotFoundException("Resident with id=" + id + " not found"));
         }

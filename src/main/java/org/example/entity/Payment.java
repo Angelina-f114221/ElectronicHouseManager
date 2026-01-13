@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -23,13 +22,12 @@ public class Payment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     // без апартамент не може да има плащане
-    @Positive(message = "Apartment id must be > 0")
+    @NotNull
     @JoinColumn(name = "apartment_id", nullable = false)
     private Apartment apartment;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
     @JoinColumn(name = "status_id")
     private PaymentStatus status;
 }
-
-

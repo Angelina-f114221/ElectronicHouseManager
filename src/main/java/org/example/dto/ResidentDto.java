@@ -1,14 +1,9 @@
 package org.example.dto;
 
+import jakarta.validation.constraints.*;
 import lombok.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
-import java.time.Period;
 
 @AllArgsConstructor
 @Getter
@@ -18,9 +13,9 @@ import java.time.Period;
 
 public class ResidentDto {
     private long id;
-    @NotBlank(message = "Name is required") private String name;
+    @NotBlank(message = "Name is required") @Size(min = 1, max = 50, message = "Name must be 1-50 characters") private String name;
     @NotNull(message = "Birth date is required") @PastOrPresent(message = "Birth date must be in the past or present") private LocalDate birth_date;
     private boolean uses_elevator;
     @NotNull(message = "Contract start date is required") @PastOrPresent(message = "Contract start date must be in the past or present") private LocalDate contract_start;
-    @Positive(message = "Apartment id must be > 0") private long apartment_id;
+    @Positive(message = "Apartment id must be > 0") @NotNull(message = "Apartment id is required") private long apartment_id;
 }

@@ -36,6 +36,12 @@ public class FeeDao {
         }
     }
 
+    public static List<Fee> getAllFees() {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Fee ORDER BY id DESC", Fee.class).list();
+        }
+    }
+
     public static void updateFee(long id, Fee fee) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -45,6 +51,7 @@ public class FeeDao {
                     existing.setFee_per_sqm(fee.getFee_per_sqm());
                     existing.setFee_per_pet_using_ca(fee.getFee_per_pet_using_ca());
                     existing.setFee_per_person_over_7_using_elevator(fee.getFee_per_person_over_7_using_elevator());
+                    // синхронизира промените с базата данни
                     session.merge(existing);
                 }
                 transaction.commit();
@@ -68,12 +75,6 @@ public class FeeDao {
                 transaction.rollback();
                 throw ex;
             }
-        }
-    }
-
-    public static List<Fee> getAllFees() {
-        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Fee ORDER BY id DESC", Fee.class).list();
         }
     }
 }

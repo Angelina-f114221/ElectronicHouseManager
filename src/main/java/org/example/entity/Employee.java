@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -16,9 +14,10 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString(callSuper=true)
+// помага да различим типа човек в таблицата person
 @DiscriminatorValue("Employee")
 public class Employee extends Person {
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "employee_company")
     @NotEmpty(message = "Employee must have at least one company")
     @ToString.Exclude

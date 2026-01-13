@@ -4,10 +4,10 @@ import org.example.configuration.SessionFactoryUtil;
 import org.example.dao.DaoUtil;
 import org.example.dao.EmployeeAssignmentDao;
 import org.example.entity.Building;
+import org.example.entity.Company;
 import org.example.entity.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import java.util.List;
 
 public class BuildingAssignmentService {
@@ -40,19 +40,15 @@ public class BuildingAssignmentService {
             Transaction tx = session.beginTransaction();
             try {
                 Building building1 = DaoUtil.require(session, Building.class, building_id);
+                Company company = DaoUtil.require(session, Company.class, company_id);
 
                 if (company_id <= 0) {
                     throw new IllegalArgumentException("company_id must be > 0");
                 }
 
-                // Проверяваме дали служителя работи в компанията
                 Employee employee1 = EmployeeAssignmentDao.getLeastLoadedEmployee(session, company_id);
 
-                building1.setCompany(employee1.getCompanies().stream()
-                        .filter(c -> c.getId() == company_id)
-                        .findFirst()
-                        .orElseThrow(() -> new IllegalStateException("Employee does not work for company_id=" + company_id)));
-
+                building1.setCompany(company);
                 building1.setEmployee(employee1);
 
                 tx.commit();
@@ -80,8 +76,10 @@ public class BuildingAssignmentService {
                         .setParameter("empId", fired_employee_id)
                         .getResultList();
 
-                // За всяка сграда преразпределяме към служител от същата компания
                 for (Building b : buildings) {
+                    if (b.getCompany() == null) {
+                        throw new IllegalStateException("Building " + b.getId() + " has no company assigned.");
+                    }
                     long company_id = b.getCompany().getId();
                     Employee least = EmployeeAssignmentDao.getLeastLoadedEmployee(session, company_id, fired_employee_id);
                     b.setEmployee(least);

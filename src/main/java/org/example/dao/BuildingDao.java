@@ -9,9 +9,7 @@ import org.example.entity.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.example.service.ValidationUtil;
-
 import java.util.List;
-
 import static org.example.dao.DaoUtil.require;
 
 public class BuildingDao {
@@ -22,11 +20,9 @@ public class BuildingDao {
             Transaction transaction = session.beginTransaction();
             try {
                 Company company = null;
-                if (building.getCompany_id() != null && building.getCompany_id() > 0) {
+                if (building.getCompany_id() > 0) {
                     company = require(session, Company.class, building.getCompany_id());
                 }
-
-                Employee employee = require(session, Employee.class, building.getEmployee_id());
 
                 Building building1 = new Building();
                 building1.setName(building.getName());
@@ -37,7 +33,17 @@ public class BuildingDao {
                 building1.setContract_start_date(building.getContract_start_date());
 
                 building1.setCompany(company);
-                building1.setEmployee(employee);
+                // след успешно избиране на компания се търси служителят с най-малко сгради, за да се сключи договор с него
+                if (company != null) {
+                    Employee employee = EmployeeAssignmentDao.getLeastLoadedEmployee(session, company.getId());
+                    building1.setEmployee(employee);
+                } else {
+                    // ако компанията е null, потребителят може ръчно да избере служител
+                    if (building.getEmployee_id() > 0) {
+                        Employee employee = require(session, Employee.class, building.getEmployee_id());
+                        building1.setEmployee(employee);
+                    }
+                }
 
                 session.persist(building1);
                 transaction.commit();
@@ -103,11 +109,9 @@ public class BuildingDao {
                 Building building1 = require(session, Building.class, id);
 
                 Company company = null;
-                if (building.getCompany_id() != null && building.getCompany_id() > 0) {
+                if (building.getCompany_id() > 0) {
                     company = require(session, Company.class, building.getCompany_id());
                 }
-
-                Employee employee = require(session, Employee.class, building.getEmployee_id());
 
                 building1.setName(building.getName());
                 building1.setFloors(building.getFloors());
@@ -117,7 +121,16 @@ public class BuildingDao {
                 building1.setContract_start_date(building.getContract_start_date());
 
                 building1.setCompany(company);
-                building1.setEmployee(employee);
+
+                if (company != null) {
+                    Employee employee = EmployeeAssignmentDao.getLeastLoadedEmployee(session, company.getId());
+                    building1.setEmployee(employee);
+                } else {
+                    if (building.getEmployee_id() > 0) {
+                        Employee employee = require(session, Employee.class, building.getEmployee_id());
+                        building1.setEmployee(employee);
+                    }
+                }
 
                 transaction.commit();
             } catch (RuntimeException exception) {
@@ -140,4 +153,4 @@ public class BuildingDao {
             }
         }
     }
-    }
+}

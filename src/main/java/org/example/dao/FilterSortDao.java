@@ -5,7 +5,6 @@ import org.example.dto.CompanyIncomeDto;
 import org.example.dto.EmployeeBuildingsDto;
 import org.example.dto.ResidentShortDto;
 import org.hibernate.Session;
-
 import java.util.List;
 
 public class FilterSortDao {

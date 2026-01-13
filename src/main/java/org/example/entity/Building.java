@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
@@ -30,15 +29,13 @@ public class Building extends BaseEntity {
     private Set<Apartment> apartments;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Positive(message = "Company id must be > 0")
     @JoinColumn(name = "company_id")
     private Company company;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Positive(message = "Employee id must be > 0")
     @JoinColumn(name = "employee_id")
     private Employee employee;
-
-    @OneToMany(mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // ако се изтрие building, се трият и fees
+    @OneToMany(mappedBy = "building", orphanRemoval = true)
     private Set<Fee> fees;
 }

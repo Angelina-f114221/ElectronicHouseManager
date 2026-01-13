@@ -1,18 +1,18 @@
 package org.example.dao;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.CompanyDto;
 import org.example.entity.Company;
+import org.example.exception.ResourceNotFoundException;
+import org.example.exception.ValidationException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.example.service.ValidationUtil;
-
+import jakarta.persistence.criteria.*;
 import java.util.List;
-
 import static org.example.dao.DaoUtil.require;
 
-// искам операциите, които са изпълняване на заявките да бъдат имплементирани в този слой. ще изграя по един DAO клас за всеки ентити модел освен base entity, тъй като той не съдържа специфични данни.
+// искам операциите, които са изпълняване на заявките да бъдат имплементирани в този слой. имам по един DAO клас за всеки ентити модел освен base entity, тъй като той не съдържа специфични данни.
 // Това е клас за заявки и не е свързан с инстанционен контекст - данните са строго отделени от заявките.
 
 public class CompanyDao {
@@ -29,13 +29,13 @@ public class CompanyDao {
                 transaction.commit();
             } catch (RuntimeException exception) {
                 transaction.rollback();
-                throw exception;
+                throw new ValidationException("Failed to create company", exception);
             }
         }
     }
 
     /*
-    искам да видим компаниите, като направим заявка с read операцията. правя статичен метод, който връща всичките компании като колекция. отварям сесията по същия начин както в createCompany. като резултат, ще получа лист от компании. използвам абстракцията на Company Entity модела, за да селектирам всичките записи. createQuery метода връща заявка. тоест ще бъде изпълнена заявка, която ще получа като резултат през допълнителен метод за резултатната колекция. създавам заявката под формата на символен низ, посочвам резултатния тип (обекти от тип company) - какви са обектите, които ще получа, и след това ще взема резултата. имам overloaded версии на Create query метода. ще спазя конвенцията и ще селектирам от таблицата компания (c e alias за company). Ще използвам Company entity модела и ще го обознача с това, което използвах в стандартната заявка. това дава еквивалент на заявка, написана на native sequel, но описана в рамките на обектноориентирания контекст през entity моделите и с езика JPQL. в заявката се използва името на entity модела, защото това е company Entity модел. когато бъде изпълнена заявката, взимаме резултатната колекция.
+    искам компаниите с заявка с read операцията. правя статичен метод, който връща всичките компании като колекция. отварям сесията по същия начин както в createCompany. като резултат, ще получа лист от компании. използвам абстракцията на Company Entity модела, за да селектирам всичките записи. createQuery метода връща заявка. тоест ще бъде изпълнена заявка, която ще получа като резултат през допълнителен метод за резултатната колекция. създавам заявката под формата на символен низ, посочвам резултатния тип (обекти от тип company) - какви са обектите, които ще получа, и след това ще взема резултата. имам overloaded версии на Create query метода. ще спазя конвенцията и ще селектирам от таблицата компания (c e alias за company). Ще използвам Company entity модела и ще го обознача с това, което използвах в стандартната заявка. това дава еквивалент на заявка, написана на native sequel, но описана в рамките на обектноориентирания контекст през entity моделите и с езика JPQL. в заявката се използва името на entity модела, защото това е company Entity модел. когато бъде изпълнена заявката, взимаме резултатната колекция.
      */
     public static List<CompanyDto> getCompanies() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
@@ -66,7 +66,7 @@ public class CompanyDao {
                     .setParameter("id", id)
                     .getResultStream()
                     .findFirst()
-                    .orElseThrow(() -> new EntityNotFoundException("Company with id=" + id + " not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Company", id));
         }
     }
 
@@ -80,11 +80,14 @@ public class CompanyDao {
             Transaction transaction = session.beginTransaction();
             try {
                 Company company1 = require(session, Company.class, id);
+                if (company1 == null) {
+                    throw new ResourceNotFoundException("Company", id);
+                }
                 company1.setName(company.getName());
                 transaction.commit();
             } catch (RuntimeException exception) {
                 transaction.rollback();
-                throw exception;
+                throw new ValidationException("Failed to update company", exception);
             }
         }
     }
@@ -97,6 +100,9 @@ public class CompanyDao {
             Transaction transaction = session.beginTransaction();
             try {
                 Company company1 = require(session, Company.class, id);
+                if (company1 == null) {
+                    throw new ResourceNotFoundException("Company", id);
+                }
                 session.remove(company1);
                 transaction.commit();
             } catch (RuntimeException exception) {
@@ -105,5 +111,4 @@ public class CompanyDao {
             }
         }
     }
-
 }

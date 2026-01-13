@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
+import org.example.validation.InvalidCompanyNames;
 import java.util.Set;
 
 /*
@@ -21,15 +21,12 @@ import java.util.Set;
 // toString методът включва само специфичните данни, без тези, които идват по наследство. обаче base entity включва първичния ключ. Тоест, трябва да може да бъде извикан в наследника и базовия toString метод, за да виждам цялата информация за обекта.
 @ToString(callSuper=true)
 public class Company extends BaseEntity {
-    // анотирам ID-то, което също е от Jakarta
-    // При генериране на записи, id-тата на една таблица са независими от тези на друга. позволява ни да имаме auto increment при code first подхода.
-    @NotBlank(message = "Company name is required") @Size(min = 2, max = 30, message = "Company name must be 2-30 characters") private String name;
+    @InvalidCompanyNames({"test", "demo"}) @NotBlank(message = "Company name is required") @Size(min = 2, max = 30, message = "Company name must be 2-30 characters") private String name;
 
    @OneToMany(mappedBy = "company")
    @ToString.Exclude
    private Set<Building> buildings;
 
-    // Ако използвам колекция (to-many връзка), се зареждат лейзи свързаните данни - преди да ги поискам, не се зареждат.
     @ManyToMany(mappedBy = "companies")
     /*
     състоянието на обекта company с извикването на супертустринга ще включи по подразбиране и сета от служители, за да направя връзката от тип one-to-many company employee. тук съм сложила една анотация, която изключва колекцията, защото в противен случай ще се хвърли exception, който е свързан със зареждането на тези данни при отделните relationships (тези данни не могат да бъдат заредени). През entity модела тези данни и неговият тустринг метод се опитва да хване колекцията, а няма данни за служителя, свързан с тази компания. Това се казва lazy initialization exception.

@@ -1,5 +1,5 @@
 package org.example.dao;
-
+//
 import jakarta.persistence.EntityNotFoundException;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.EmployeeDto;
@@ -8,11 +8,9 @@ import org.example.entity.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.example.service.ValidationUtil;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import static org.example.dao.DaoUtil.require;
 
 public class EmployeeDao {
@@ -24,8 +22,8 @@ public class EmployeeDao {
             try {
                 Set<Company> companies = new HashSet<>();
                 if (employee.getCompany_ids() != null && !employee.getCompany_ids().isEmpty()) {
-                    for (Long companyId : employee.getCompany_ids()) {
-                        Company company = require(session, Company.class, companyId);
+                    for (Long company_id : employee.getCompany_ids()) {
+                        Company company = require(session, Company.class, company_id);
                         companies.add(company);
                     }
                 }
@@ -46,6 +44,7 @@ public class EmployeeDao {
 
     public static List<EmployeeDto> getEmployees() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            // зарежда employee и company заедно
             List<Employee> employees = session.createQuery(
                     """
                     FROM Employee e
@@ -57,6 +56,7 @@ public class EmployeeDao {
                             e.getId(),
                             e.getName(),
                             e.getBirth_date(),
+                            // преобразува set от компания в сет от id
                             e.getCompanies().stream().map(Company::getId).collect(java.util.stream.Collectors.toSet())
                     ))
                     .toList();
@@ -75,7 +75,7 @@ public class EmployeeDao {
                     .getResultStream()
                     .findFirst()
                     .orElseThrow(() -> new EntityNotFoundException("Employee with id=" + id + " not found"));
-
+            // преобразува entity в dto
             return new EmployeeDto(
                     employee.getId(),
                     employee.getName(),
@@ -94,8 +94,8 @@ public class EmployeeDao {
 
                 Set<Company> companies = new HashSet<>();
                 if (employee.getCompany_ids() != null && !employee.getCompany_ids().isEmpty()) {
-                    for (Long companyId : employee.getCompany_ids()) {
-                        Company company = require(session, Company.class, companyId);
+                    for (Long company_id : employee.getCompany_ids()) {
+                        Company company = require(session, Company.class, company_id);
                         companies.add(company);
                     }
                 }

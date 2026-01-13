@@ -12,7 +12,6 @@ import org.example.entity.Payment;
 import org.example.entity.PaymentStatus;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -30,7 +29,7 @@ public class PaymentService {
         LocalDate payment_date;
 
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
+            Transaction transation = session.beginTransaction();
             try {
                 Apartment apartment = DaoUtil.require(session, Apartment.class, req.getApartment_id());
                 Building building = apartment.getBuilding();
@@ -40,16 +39,34 @@ public class PaymentService {
                 if (company == null || employee == null) {
                     throw new IllegalStateException("Building must have company and employee before payment.");
                 }
+                // проверка дали е платено за месеца
+                String period = YearMonth.from(req.getPayment_date()).toString();
+                Long existingPaymentCount = session.createQuery(
+                                "SELECT COUNT(*) FROM Payment p WHERE p.apartment.id = :apt_id AND p.period = :period",
+                                Long.class
+                        )
+                        .setParameter("apt_id", req.getApartment_id())
+                        .setParameter("period", period)
+                        .getSingleResult();
+
+                if (existingPaymentCount > 0) {
+                    System.out.println("Apartment " + req.getApartment_id() + " already paid for period " + period);
+                    transation.rollback();
+                    return;
+                }
 
                 amount = BillingService.calculateMonthlyFeeForApartment(apartment.getId());
                 payment_date = req.getPayment_date();
-                String period = YearMonth.from(payment_date).toString();
 
                 PaymentStatus paidStatus = PaymentStatusDao.getByCode("PAID");
                 if (paidStatus == null) {
                     throw new IllegalStateException("PaymentStatus 'PAID' not found. Initialize payment_statuses table.");
                 }
-
+                // ако няма payment status, то го запазваме
+                if (paidStatus.getId() == 0L || paidStatus.getId() <= 0) {
+                    session.persist(paidStatus);
+                }
+                // създаване на обект с извлечените данни горе
                 Payment payment = new Payment();
                 payment.setApartment(apartment);
                 payment.setPayment_date(payment_date);
@@ -58,19 +75,21 @@ public class PaymentService {
                 payment.setStatus(paidStatus);
 
                 session.persist(payment);
-                tx.commit();
+                transation.commit();
 
                 company_name = company.getName();
                 employee_name = employee.getName();
                 building_name = building.getName();
                 apartment_id = apartment.getId();
 
+                System.out.println("Payment successful for apartment " + apartment_id + " in period " + period);
+
             } catch (RuntimeException ex) {
-                tx.rollback();
+                transation.rollback();
                 throw ex;
             }
         }
-
+        // подготовка за експорт
         PaymentExportService.appendPaymentLine(
                 filePath,
                 company_name,
@@ -81,4 +100,5 @@ public class PaymentService {
                 payment_date
         );
     }
+
 }

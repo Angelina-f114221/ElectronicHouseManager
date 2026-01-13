@@ -2,12 +2,10 @@ package org.example.service;
 
 import org.example.configuration.SessionFactoryUtil;
 import org.hibernate.Session;
-
 import java.math.BigDecimal;
-import java.util.List;
 
 public class BillingReportService {
-
+// изчислява се цялата сума от такси, която трябва да се заплати от живущите в даден асграда. сумират се таксите за всеки апартамент в сградата
     public static BigDecimal getDueSumForBuilding(long building_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             var apartment_ids = session.createQuery("""
@@ -23,7 +21,7 @@ public class BillingReportService {
             return total;
         }
     }
-
+// изчислява се сумата от такси, която следва да се плати на дадена компания. сумират се таксите за всеки апартамент в сграда към дадената компания
     public static BigDecimal getDueSumForCompany(long company_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             var apartment_ids = session.createQuery("""
@@ -39,7 +37,7 @@ public class BillingReportService {
             return total;
         }
     }
-
+    // изчислява се сумата от такси, която следва да се плати на даден служител. сумират се таксите за всеки апартамент в сграда към даден служител
     public static BigDecimal getDueSumForEmployee(long employee_id) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             var apartment_ids = session.createQuery("""

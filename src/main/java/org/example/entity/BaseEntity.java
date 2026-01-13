@@ -12,6 +12,8 @@ import lombok.ToString;
 @ToString
 public class BaseEntity {
     @Id
+    // стратегия, според която id автоматично започва от стойност 1 и се инкрементира с 1 всеки път
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // не може да е null
     private long id;
 }

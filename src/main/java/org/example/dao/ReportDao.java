@@ -1,11 +1,24 @@
 package org.example.dao;
+// not seen
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Root;
 import org.example.configuration.SessionFactoryUtil;
 import org.example.dto.AmountByKeyDto;
 import org.example.dto.IdNameDto;
+import org.example.entity.Apartment;
+import org.example.entity.Building;
+import org.example.entity.Company;
+import org.example.entity.Fee;
+import org.example.entity.Payment;
+import org.example.exception.BillingException;
+import org.example.exception.ResourceNotFoundException;
 import org.hibernate.Session;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ReportDao {
@@ -102,8 +115,7 @@ public class ReportDao {
                     .setParameter("company_id", company_id)
                     .getResultStream()
                     .findFirst()
-                    .orElseThrow(() -> new EntityNotFoundException("... not found"));
-
+                    .orElseThrow(() -> new EntityNotFoundException("Company not found"));
         }
     }
 
@@ -124,8 +136,7 @@ public class ReportDao {
                     .setParameter("building_id", building_id)
                     .getResultStream()
                     .findFirst()
-                    .orElseThrow(() -> new EntityNotFoundException("... not found"));
-
+                    .orElseThrow(() -> new EntityNotFoundException("Building not found"));
         }
     }
 
@@ -147,8 +158,52 @@ public class ReportDao {
                     .setParameter("employee_id", employee_id)
                     .getResultStream()
                     .findFirst()
-                    .orElseThrow(() -> new EntityNotFoundException("... not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+        }
+    }
 
+    public static BigDecimal getDueSumForCompany(long companyId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+
+            Company company = session.find(Company.class, companyId);
+            if (company == null) {
+                throw new ResourceNotFoundException("Company", companyId);
+            }
+
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
+            Root<Company> companyRoot = cq.from(Company.class);
+            Join<Company, Building> buildings = companyRoot.join("buildings");
+            Join<Building, Apartment> apartments = buildings.join("apartments");
+            Join<Apartment, Fee> fees = apartments.join("fees");
+
+            cq.select(cb.sum(fees.get("feeSqm")));
+            cq.where(cb.equal(companyRoot.get("id"), companyId));
+
+            BigDecimal result = session.createQuery(cq).getSingleResult();
+            return result != null ? result : BigDecimal.ZERO;
+        } catch (ResourceNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new BillingException("Failed to calculate due sum for company " + companyId, e);
+        }
+    }
+
+
+    public static BigDecimal getDueSumForBuilding(long buildingId) {
+        try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<BigDecimal> cq = cb.createQuery(BigDecimal.class);
+            Root<Building> building = cq.from(Building.class);
+            Join<Building, Apartment> apartments = building.join("apartments");
+            Join<Apartment, Fee> fees = apartments.join("fees");
+
+            cq.select(cb.sum(fees.get("feeSqm")));
+            cq.where(cb.equal(building.get("id"), buildingId));
+            cq.groupBy(building.get("id"));
+
+            BigDecimal result = session.createQuery(cq).getSingleResult();
+            return result != null ? result : BigDecimal.ZERO;
         }
     }
 }

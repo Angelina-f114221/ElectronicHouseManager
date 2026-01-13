@@ -19,6 +19,7 @@ public class PaymentStatusDao {
             }
         }
     }
+
     public static List<PaymentStatus> getPaymentStatuses() {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM PaymentStatus", PaymentStatus.class).list();
@@ -33,10 +34,26 @@ public class PaymentStatusDao {
 
     public static PaymentStatus getByCode(String code) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
-            return session.createQuery(
-                    "FROM PaymentStatus WHERE code = :code",
-                    PaymentStatus.class
-            ).setParameter("code", code).getSingleResult();
+            PaymentStatus result = session.createQuery(
+                            "FROM PaymentStatus WHERE code = :code",
+                            PaymentStatus.class
+                    ).setParameter("code", code)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+            // хардкоднато, ако няма ве че инсърт за него в базата
+            if (result == null) {
+                PaymentStatus hardcoded = new PaymentStatus();
+                if ("PAID".equals(code)) {
+                    hardcoded.setCode("PAID");
+                    hardcoded.setDescription("Payment completed");
+                } else if ("PENDING".equals(code)) {
+                    hardcoded.setCode("PENDING");
+                    hardcoded.setDescription("Payment pending");
+                }
+                return hardcoded;
+            }
+            return result;
         }
     }
 }

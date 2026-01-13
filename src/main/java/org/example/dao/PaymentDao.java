@@ -8,10 +8,8 @@ import org.example.entity.Payment;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.example.service.ValidationUtil;
-
 import java.math.BigDecimal;
 import java.util.List;
-
 import static org.example.dao.DaoUtil.require;
 
 public class PaymentDao {
@@ -28,6 +26,7 @@ public class PaymentDao {
                 payment1.setPayment_date(payment.getPayment_date());
                 payment1.setPeriod(payment.getPeriod());
                 payment1.setApartment(apartment1);
+
 
                 session.persist(payment1);
                 transaction.commit();
@@ -46,7 +45,8 @@ public class PaymentDao {
                     p.amount,
                     p.payment_date,
                     p.period,
-                    p.apartment.id
+                    p.apartment.id,
+                    p.status.code
                 )
                 FROM Payment p
             """, PaymentDto.class).getResultList();
@@ -61,7 +61,8 @@ public class PaymentDao {
                     p.amount,
                     p.payment_date,
                     p.period,
-                    p.apartment.id
+                    p.apartment.id,
+                    p.status.code
                 )
                 FROM Payment p
                 WHERE p.id = :id
@@ -109,6 +110,7 @@ public class PaymentDao {
     }
     public static BigDecimal getTotalPaid(long apartment_id, String period) {
         try (Session session = SessionFactoryUtil.getSessionFactory().openSession()) {
+            // търси сума на всички плащания на апартамент за даден месец
             return session.createQuery(
                             "SELECT COALESCE(SUM(p.amount), 0.0) FROM Payment p " +
                                     "WHERE p.apartment.id = :apt_id AND p.period = :period",
@@ -119,5 +121,4 @@ public class PaymentDao {
                     .getSingleResult();
         }
     }
-
 }

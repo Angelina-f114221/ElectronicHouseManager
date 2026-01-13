@@ -1,7 +1,6 @@
 package org.example.dto;
 
 import lombok.*;
-
 import java.math.BigDecimal;
 
 @AllArgsConstructor
@@ -9,7 +8,7 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 @NoArgsConstructor
-
+// за генериране на различни отчети със суми с различни теми (company, building, employee)
 public class AmountByKeyDto {
     private long id;
     private String name;
@@ -19,5 +18,3 @@ public class AmountByKeyDto {
         this(id, name, amount != null ? BigDecimal.valueOf(amount.doubleValue()) : BigDecimal.ZERO);
     }
 }
-
-

@@ -6,7 +6,6 @@ import org.example.dao.DaoUtil;
 import org.example.entity.Apartment;
 import org.example.entity.Fee;
 import org.hibernate.Session;
-
 import java.math.BigDecimal;
 
 public class BillingService {
@@ -20,10 +19,9 @@ public class BillingService {
             Fee latestFee = BillingDao.getLatestFeeForBuilding(session, apartment.getBuilding().getId());
 
             if (latestFee == null) {
-                return BigDecimal.ZERO;  // Няма такса → 0 лв
+                return BigDecimal.ZERO;
             }
 
-// Използваме費от Fee entity, не от Building
             BigDecimal feeArea = apartment.getArea().multiply(latestFee.getFee_per_sqm());
             BigDecimal feePets = BigDecimal.valueOf(apartment.getPets_using_ca()).multiply(latestFee.getFee_per_pet_using_ca());
             BigDecimal feeElevator = BigDecimal.valueOf(residentsCount).multiply(latestFee.getFee_per_person_over_7_using_elevator());

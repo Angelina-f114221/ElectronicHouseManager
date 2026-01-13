@@ -2,7 +2,7 @@ package org.example.dao;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.Session;
-
+// класът не може да се наследява, но работи за всички, защото е направен общ
 public final class DaoUtil {
     private DaoUtil() {}
 
@@ -16,5 +16,4 @@ public final class DaoUtil {
         }
         return entity;
     }
-
 }

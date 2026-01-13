@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.util.Set;
 
 @Entity
@@ -20,5 +19,4 @@ public class Owner extends Person {
     @JoinTable(name = "owner_apartment")
     @ToString.Exclude
     private Set<Apartment> apartments;
-
 }
